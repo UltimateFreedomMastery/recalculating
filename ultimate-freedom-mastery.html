@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Freedom Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a84c;
+  --gold-light: #e8d5a0;
+  --gold-glow: rgba(201, 168, 76, 0.15);
+  --bg-deep: #0a0a0e;
+  --bg-section: #0d0d12;
+  --text-primary: #e8e4dc;
+  --text-muted: #8a857a;
+  --text-dim: #5a564e;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Outfit', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) var(--bg-deep);
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── GRAIN OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── REVEAL SYSTEM ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.3s; }
+.reveal-delay-3 { transition-delay: 0.45s; }
+.reveal-delay-4 { transition-delay: 0.6s; }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 2rem;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-bg .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  animation: orbFloat 12s ease-in-out infinite;
+}
+.hero-bg .orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%);
+  top: 10%; left: 20%;
+}
+.hero-bg .orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(201,168,76,0.05), transparent 70%);
+  bottom: 20%; right: 15%;
+  animation-delay: -4s;
+}
+.hero-bg .orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(232,213,160,0.04), transparent 70%);
+  top: 50%; left: 60%;
+  animation-delay: -8s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+.hero-line {
+  width: 1px;
+  height: 0;
+  background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  animation: lineGrow 2s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes lineGrow {
+  to { height: 120px; }
+}
+
+.hero-label {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 1.2s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(3rem, 8vw, 7.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  max-width: 900px;
+  opacity: 0;
+  animation: fadeUp 1.4s 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+  z-index: 1;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-family: var(--sans);
+  font-weight: 200;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-muted);
+  max-width: 620px;
+  margin-top: 2rem;
+  line-height: 1.7;
+  opacity: 0;
+  animation: fadeUp 1.2s 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+  animation: fadeUp 1s 2.8s ease forwards;
+}
+.hero-scroll span {
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.hero-scroll .arrow {
+  width: 1px;
+  height: 30px;
+  background: var(--gold);
+  position: relative;
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.5); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SECTIONS ─── */
+section {
+  padding: 8rem 2rem;
+  position: relative;
+}
+
+.section-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.section-number {
+  font-family: var(--serif);
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 2.5rem;
+  color: var(--text-primary);
+}
+.section-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.section-text {
+  font-family: var(--sans);
+  font-weight: 200;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* ─── DIVIDER ─── */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+.divider-line {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  opacity: 0.3;
+}
+.divider-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  margin: 0 1.2rem;
+  opacity: 0.5;
+}
+
+/* ─── QUOTE BLOCK ─── */
+.quote-block {
+  padding: 6rem 2rem;
+  text-align: center;
+  position: relative;
+}
+.quote-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, var(--gold-glow), transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+.quote-text {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.5;
+  color: var(--text-primary);
+  max-width: 750px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ─── CONTRAST CARDS ─── */
+.contrast-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin: 2.5rem 0;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.08);
+}
+.contrast-card {
+  padding: 2.5rem;
+  background: var(--bg-deep);
+}
+.contrast-card.dark {
+  background: rgba(10,10,14,0.95);
+}
+.contrast-card.glow {
+  background: rgba(201,168,76,0.03);
+}
+.contrast-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 1.2rem;
+}
+.contrast-label.gold { color: var(--gold); opacity: 0.7; }
+
+.contrast-item {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  line-height: 2;
+  color: var(--text-muted);
+}
+.contrast-card.glow .contrast-item {
+  color: var(--text-primary);
+}
+
+@media (max-width: 600px) {
+  .contrast-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── TWO STEP ─── */
+.step-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin: 3rem 0;
+}
+@media (max-width: 700px) {
+  .step-container { grid-template-columns: 1fr; }
+}
+
+.step-card {
+  padding: 2.5rem;
+  border: 1px solid rgba(201,168,76,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  opacity: 0.4;
+}
+.step-number {
+  font-family: var(--serif);
+  font-size: 4rem;
+  font-weight: 300;
+  color: var(--gold);
+  opacity: 0.12;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.step-title {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+}
+.step-arrow {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--gold);
+  opacity: 0.6;
+  margin-bottom: 1.2rem;
+}
+.step-text {
+  font-family: var(--sans);
+  font-weight: 200;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+/* ─── FRAMEWORK WHEEL ─── */
+.framework-ring {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 3rem auto;
+  max-width: 600px;
+}
+.fw-element {
+  padding: 0.7rem 1.4rem;
+  border: 1px solid rgba(201,168,76,0.12);
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--text-muted);
+  transition: all 0.4s ease;
+  cursor: default;
+  position: relative;
+}
+.fw-element:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.04);
+}
+.fw-meta {
+  padding: 0.7rem 1.8rem;
+  border: 1px solid rgba(201,168,76,0.25);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--gold);
+  background: rgba(201,168,76,0.04);
+}
+
+/* ─── FEEL LIST ─── */
+.feel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem 3rem;
+  margin: 2.5rem 0;
+}
+@media (max-width: 600px) {
+  .feel-grid { grid-template-columns: 1fr; }
+}
+.feel-item {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--text-muted);
+  padding-left: 1.5rem;
+  position: relative;
+}
+.feel-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 6px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.4;
+}
+
+/* ─── FINAL SECTION ─── */
+.finale {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 6rem 2rem;
+  position: relative;
+}
+.finale::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(201,168,76,0.06), transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.finale-text {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  line-height: 1.6;
+  color: var(--text-primary);
+  max-width: 700px;
+  position: relative;
+}
+.finale-text em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.finale-line {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  margin-top: 3rem;
+  opacity: 0.3;
+}
+
+/* ─── PROGRESS BAR ─── */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 1px;
+  background: var(--gold);
+  z-index: 10000;
+  transition: width 0.1s linear;
+  opacity: 0.6;
+}
+
+/* ─── NAV DOT ─── */
+.nav-dots {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+}
+.nav-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  opacity: 0.3;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.nav-dot.active {
+  background: var(--gold);
+  opacity: 1;
+  transform: scale(1.4);
+}
+
+@media (max-width: 768px) {
+  .nav-dots { display: none; }
+  section { padding: 5rem 1.5rem; }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ─── NOT LIST ─── */
+.not-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+}
+.not-item {
+  padding: 0.4rem 1rem;
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  border: 1px solid rgba(255,255,255,0.04);
+  text-decoration: line-through;
+  text-decoration-color: rgba(201,168,76,0.3);
+}
+
+.does-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+}
+.does-item {
+  padding: 0.4rem 1rem;
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 0.85rem;
+  color: var(--gold-light);
+  border: 1px solid rgba(201,168,76,0.12);
+}
+
+/* ─── EMPHASIS TEXT ─── */
+.emphasis {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--gold-light);
+  line-height: 1.7;
+  margin: 2rem 0;
+  padding-left: 1.5rem;
+  border-left: 1px solid rgba(201,168,76,0.2);
+}
+
+/* ─── COLOPHON ─── */
+.colophon {
+  padding: 4rem 2rem 5rem;
+  text-align: center;
+}
+.colophon-text {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  line-height: 1.8;
+  color: var(--text-dim);
+}
+.colophon-text a {
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-decoration-color: rgba(90, 86, 78, 0.4);
+  text-underline-offset: 3px;
+  transition: color 0.3s ease;
+}
+.colophon-text a:hover {
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<header class="hero" data-section="0">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-line"></div>
+  <p class="hero-label">A Philosophy of Internal Sovereignty</p>
+  <h1 class="hero-title">Ultimate<br><em>Freedom</em><br>Mastery</h1>
+  <p class="hero-sub">The art and discipline of living without outsourcing peace, love, or happiness to conditions—while remaining fully engaged with life.</p>
+  <div class="hero-scroll">
+    <span>Descend</span>
+    <div class="arrow"></div>
+  </div>
+</header>
+
+<!-- ═══════════════ 01 — THE CORE ═══════════════ -->
+<section data-section="1">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">01</div>
+      <h2 class="section-title">The <em>Narrow</em> Middle</h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">UFM sits in a space most systems cannot hold. It is neither escape nor attachment, neither transcendence nor resignation. It occupies the demanding territory between fully alive and fully free.</p>
+
+    <div class="contrast-grid reveal reveal-delay-2">
+      <div class="contrast-card dark">
+        <div class="contrast-label">Not this</div>
+        <div class="contrast-item">Escaping the world</div>
+        <div class="contrast-item">Transcending the human</div>
+        <div class="contrast-item">Achieving permanent bliss</div>
+        <div class="contrast-item">Controlling outcomes</div>
+      </div>
+      <div class="contrast-card dark">
+        <div class="contrast-label">Not this either</div>
+        <div class="contrast-item">Detachment</div>
+        <div class="contrast-item">Apathy</div>
+        <div class="contrast-item">Spiritual bypass</div>
+        <div class="contrast-item">Passive acceptance</div>
+      </div>
+    </div>
+
+    <p class="emphasis reveal reveal-delay-3">Fully alive, fully responsible, fully free—without requiring life to cooperate.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ QUOTE ═══════════════ -->
+<div class="quote-block reveal" data-section="2">
+  <p class="quote-text">Everything people pursue—success, security, love, meaning—reduces to a desire for peace, love, or happiness.</p>
+</div>
+
+<!-- ═══════════════ 02 — FOUNDATIONAL INSIGHT ═══════════════ -->
+<section data-section="3">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">02</div>
+      <h2 class="section-title">The <em>Foundational</em> Insight</h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">Chasing peace externally destabilizes it. Controlling life to secure happiness exhausts the nervous system. Spiritual systems often promise fulfillment by negating the human.</p>
+    <p class="section-text reveal reveal-delay-2">So UFM makes a radical but practical move: instead of arranging life to feel okay, re-orient identity so peace, love, and happiness are the default operating context.</p>
+    <p class="emphasis reveal reveal-delay-3">This is not positive thinking. It's not belief. It's not "deciding to be happy." It's an identity and orientation shift.</p>
+  </div>
+</section>
+
+<div class="divider reveal"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+<!-- ═══════════════ 03 — ORIENTATION ═══════════════ -->
+<section data-section="4">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">03</div>
+      <h2 class="section-title">Orientation Over <em>Optimization</em></h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">Most people are optimizing behavior, mindset, habits, productivity, outcomes. UFM says: optimization without orientation just makes you better at running in the wrong direction.</p>
+    <p class="section-text reveal reveal-delay-2">Orientation asks deeper questions. From where am I living? What am I identified as? What is life relating to right now—enemy, task, gift, threat, playground?</p>
+    <p class="emphasis reveal reveal-delay-3">You don't need better discipline. You need truer bearings.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 04 — TWO STEP ═══════════════ -->
+<section data-section="5">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">04</div>
+      <h2 class="section-title">The Spiritual <em>Two-Step</em></h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">UFM operationalizes transformation through a deceptively simple movement—a rhythm between two positions that most systems only know one of.</p>
+
+    <div class="step-container reveal reveal-delay-2">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-title">Human → Being</div>
+        <div class="step-arrow">recognizing, stepping back</div>
+        <div class="step-text">You recognize when old programming is running the show. You step out of identification with the reactive self—not to escape it, but to stop letting it drive. This creates space, regulation, perspective, and choice.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-title">Being → Human Being</div>
+        <div class="step-arrow">returning, engaging</div>
+        <div class="step-text">You return to life with power online. Engaged without fragility. Active without compulsion. Expressive without self-loss. This is where mastery lives.</div>
+      </div>
+    </div>
+
+    <p class="emphasis reveal reveal-delay-3">Most spiritual systems stop after Step 1. Most self-help systems never reach it. UFM requires both—and the rhythm between them.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 05 — FRAMEWORK ═══════════════ -->
+<section data-section="6">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">05</div>
+      <h2 class="section-title">The <em>Framework</em></h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">UFM maps the internal landscape into trainable capacities. Each element has a Shadow expression, an Empowered expression, and a Mastery expression. Freedom isn't one realization—it's a skillset.</p>
+
+    <div class="framework-ring reveal reveal-delay-2">
+      <div class="fw-element">Acceptance</div>
+      <div class="fw-element">Presence</div>
+      <div class="fw-element">Clarity</div>
+      <div class="fw-element">Authenticity</div>
+      <div class="fw-element">Harmony</div>
+      <div class="fw-element">Purpose</div>
+      <div class="fw-element">Perspective</div>
+      <div class="fw-element">Growth</div>
+      <div class="fw-element">Flow</div>
+      <div class="fw-meta">Oneness</div>
+    </div>
+
+    <p class="section-text reveal reveal-delay-3">Mastery means you can choose which capacity to bring online, in real time, without collapsing into old patterns. Intentional combinations—Powerplays—meet specific inner situations with precision.</p>
+  </div>
+</section>
+
+<div class="divider reveal"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+<!-- ═══════════════ 06 — IDENTITY ═══════════════ -->
+<section data-section="7">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">06</div>
+      <h2 class="section-title">The <em>Identity</em> Distinction</h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">The manifested self is real. The core self is not a thing. Your roles, personality, body, history, preferences—real. But not what you are. When this isn't clear, people either cling to identity or try to annihilate it.</p>
+    <p class="emphasis reveal reveal-delay-2">Identity becomes a tool, not a prison. You don't "find yourself." You stop mistaking the interface for the source.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 07 — PHENOMENOLOGY ═══════════════ -->
+<section data-section="8">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">07</div>
+      <h2 class="section-title">What Freedom <em>Feels</em> Like</h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">This matters, because people mishear UFM as abstract. In lived experience, mastery has a specific texture.</p>
+
+    <div class="feel-grid reveal reveal-delay-2">
+      <div class="feel-item">A quiet, non-desperate okay-ness</div>
+      <div class="feel-item">Emotional range without captivity</div>
+      <div class="feel-item">Motivation without self-violence</div>
+      <div class="feel-item">Ambition without emptiness</div>
+      <div class="feel-item">Rest without guilt</div>
+      <div class="feel-item">Engagement without survival urgency</div>
+    </div>
+
+    <p class="emphasis reveal reveal-delay-3">Freedom is not the absence of emotion. It's the absence of coercion.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ QUOTE ═══════════════ -->
+<div class="quote-block reveal" data-section="9">
+  <p class="quote-text">You still feel sadness, anger, grief, desire, excitement, fear. The difference is: you are no longer compelled to stay where you don't want to be.</p>
+</div>
+
+<!-- ═══════════════ 08 — WHAT IT'S NOT ═══════════════ -->
+<section data-section="10">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">08</div>
+      <h2 class="section-title">Critical <em>Clarity</em></h2>
+    </div>
+
+    <div class="not-list reveal reveal-delay-1">
+      <div class="not-item">a belief system</div>
+      <div class="not-item">a morality</div>
+      <div class="not-item">a personality upgrade</div>
+      <div class="not-item">a productivity hack</div>
+      <div class="not-item">therapy replacement</div>
+      <div class="not-item">enlightenment cosplay</div>
+    </div>
+
+    <div class="does-list reveal reveal-delay-2">
+      <div class="does-item">increases responsibility</div>
+      <div class="does-item">removes excuses</div>
+      <div class="does-item">exposes self-deception</div>
+      <div class="does-item">demands honesty</div>
+      <div class="does-item">destabilizes false identities</div>
+    </div>
+
+    <p class="section-text reveal reveal-delay-3">This is why it attracts high-functioning, successful, unfulfilled people more than people in acute crisis.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 09 — STABLE FREEDOM ═══════════════ -->
+<section data-section="11">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">09</div>
+      <h2 class="section-title">The Only <em>Stable</em> Freedom</h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">External freedoms—money, time, autonomy, status—collapse without internal freedom. They amplify inner instability. They remove distractions. They expose unresolved orientation.</p>
+    <p class="emphasis reveal reveal-delay-2">Without inner freedom, success magnifies suffering. With it, success becomes play.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ 10 — WHY NOW ═══════════════ -->
+<section data-section="12">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-number">10</div>
+      <h2 class="section-title">Why This <em>Matters</em> Now</h2>
+    </div>
+    <p class="section-text reveal reveal-delay-1">We're entering an era where external reference points are unreliable, technology accelerates disorientation, identity structures are dissolving, and optimization culture is burning people out.</p>
+    <p class="section-text reveal reveal-delay-2">People don't need more information, more hacks, more goals. They need internal sea legs.</p>
+    <p class="emphasis reveal reveal-delay-3">UFM is not about fixing the world. It's about creating humans who are no longer at war with life. Enough of those exist? The world changes as a side effect.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ FINALE ═══════════════ -->
+<div class="finale reveal" data-section="13">
+  <p class="finale-text">Ultimate Freedom Mastery is learning how to be <em>fully human</em> without being owned by the human—so life can be <em>experienced</em>, not survived.</p>
+  <div class="finale-line"></div>
+</div>
+
+<footer class="colophon reveal">
+  <p class="colophon-text">This philosophy is part of the broader body of work known as Ultimate Freedom Mastery. Context lives at <a href="https://ufmastery.com" target="_blank" rel="noopener">ufmastery.com</a></p>
+</footer>
+
+<script>
+// ─── REVEAL ON SCROLL ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.01, rootMargin: '0px 0px 0px 0px' });
+
+// Fallback: if elements haven't revealed after 3s, force them visible
+setTimeout(() => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 1.5) {
+      el.classList.add('visible');
+    }
+  });
+}, 3000);
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Robust scroll fallback for mobile
+function revealOnScroll() {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 20) {
+      el.classList.add('visible');
+    }
+  });
+}
+window.addEventListener('scroll', revealOnScroll, { passive: true });
+window.addEventListener('touchmove', revealOnScroll, { passive: true });
+revealOnScroll();
+
+// ─── PROGRESS BAR ───
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  progress.style.width = pct + '%';
+}, { passive: true });
+
+// ─── NAV DOTS ───
+const sections = document.querySelectorAll('[data-section]');
+const dotsContainer = document.getElementById('navDots');
+
+sections.forEach((s, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot';
+  if (i === 0) dot.classList.add('active');
+  dot.addEventListener('click', () => {
+    s.scrollIntoView({ behavior: 'smooth' });
+  });
+  dotsContainer.appendChild(dot);
+});
+
+const dots = dotsContainer.querySelectorAll('.nav-dot');
+const dotObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = Array.from(sections).indexOf(entry.target);
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.4 });
+
+sections.forEach(s => dotObserver.observe(s));
+</script>
+</body>
+</html>
