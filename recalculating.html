@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recalculating</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-start: #0d0f12;
+    --bg-mid: #111419;
+    --bg-end: #f7f5f0;
+    --text-lost: #6b7280;
+    --text-found: #1a1a1a;
+    --accent: #c9a96e;
+    --accent-glow: rgba(201, 169, 110, 0.15);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    background: var(--bg-start);
+  }
+
+  body {
+    font-family: var(--serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ──────── HERO ──────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-start);
+    position: relative;
+    overflow: hidden;
+    padding: 2rem;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 600px at 30% 40%, rgba(201,169,110,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 400px at 70% 60%, rgba(107,114,128,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Subtle animated route lines in the background */
+  .route-lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .route-lines svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .route-line {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1;
+    stroke-dasharray: 8 12;
+    animation: dash 30s linear infinite;
+  }
+
+  .route-line:nth-child(2) {
+    stroke: #6b7280;
+    stroke-dasharray: 4 18;
+    animation-duration: 45s;
+    animation-direction: reverse;
+  }
+
+  .route-line:nth-child(3) {
+    stroke: var(--accent);
+    stroke-dasharray: 2 20;
+    animation-duration: 60s;
+    opacity: 0.5;
+  }
+
+  @keyframes dash {
+    to { stroke-dashoffset: -500; }
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(1.8rem, 7.5vw, 7rem);
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0;
+    animation: titleReveal 2s ease-out 0.5s forwards;
+    position: relative;
+    z-index: 1;
+    padding: 0 1rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 480px) {
+    .hero-title {
+      letter-spacing: 0.03em;
+    }
+  }
+
+  .hero-subtitle {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    color: var(--text-lost);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1.5s ease-out 1.5s forwards;
+    position: relative;
+    z-index: 1;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease-out 2.5s forwards;
+    z-index: 1;
+  }
+
+  .scroll-cue span {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-lost);
+  }
+
+  .scroll-cue .arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+
+  @keyframes titleReveal {
+    from { opacity: 0; letter-spacing: 0.3em; filter: blur(8px); }
+    to { opacity: 1; letter-spacing: 0.08em; filter: blur(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ──────── TRANSITION GRADIENT ──────── */
+  .dark-to-light {
+    height: 60vh;
+    background: linear-gradient(to bottom, var(--bg-start), var(--bg-mid) 40%, #2a2520 70%, #5c524a 85%, var(--bg-end));
+    position: relative;
+  }
+
+  .dark-to-light::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    background: linear-gradient(to bottom, transparent, var(--bg-end));
+  }
+
+  /* ──────── ESSAY BODY ──────── */
+  .essay {
+    background: var(--bg-end);
+    padding: 0 2rem 8rem;
+    position: relative;
+  }
+
+  .essay-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* Paragraphs */
+  .para {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.15rem, 2vw, 1.35rem);
+    line-height: 1.85;
+    color: var(--text-found);
+    margin-bottom: 2.2rem;
+  }
+
+  /* GPS voice styling */
+  .gps-voice {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 0.92em;
+    color: #555;
+    background: rgba(0,0,0,0.04);
+    padding: 0.15em 0.55em;
+    border-radius: 3px;
+    border-left: 2px solid var(--accent);
+    display: inline;
+    white-space: nowrap;
+  }
+
+  /* Emphasis */
+  .quiet-emphasis {
+    font-style: italic;
+    color: #8b7355;
+  }
+
+  .strong-emphasis {
+    font-weight: 600;
+    color: var(--text-found);
+  }
+
+  /* The repeating "recalculates" */
+  .recalculate {
+    display: block;
+    text-align: center;
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    color: #999;
+    margin: 0.3rem 0;
+  }
+
+  .recalculate-group {
+    margin: 2.5rem 0;
+  }
+
+  /* The "always" repetition */
+  .always-block {
+    margin: 2.5rem 0;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--accent);
+  }
+
+  .always-line {
+    display: block;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.15rem, 2vw, 1.35rem);
+    line-height: 2;
+    color: var(--text-found);
+  }
+
+  /* The "near-misses" list */
+  .near-misses {
+    text-align: center;
+    margin: 3rem 0;
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    color: #8b7355;
+    letter-spacing: 0.06em;
+    line-height: 2.2;
+  }
+
+  .near-misses span {
+    display: inline-block;
+    margin: 0 0.6rem;
+  }
+
+  .dot-sep {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    vertical-align: middle;
+    margin: 0 0.8rem;
+    opacity: 0.5;
+  }
+
+  /* The pivotal question */
+  .pivot {
+    margin: 4rem 0;
+    padding: 3rem 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .pivot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .pivot-question {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    line-height: 1.6;
+    color: var(--text-found);
+    font-style: italic;
+  }
+
+  .pivot-question .inner-q {
+    display: block;
+    margin-top: 0.8rem;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--accent);
+    font-size: 1.1em;
+    letter-spacing: 0.01em;
+  }
+
+  /* Closing */
+  .closing {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    position: relative;
+  }
+
+  .closing::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .closing-text {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+    line-height: 1.9;
+    color: var(--text-found);
+    text-align: center;
+  }
+
+  .closing-final {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 500;
+    color: #6b5c3e;
+  }
+
+  /* ──────── SECTION DIVIDERS ──────── */
+  .section-break {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3.5rem 0;
+    gap: 1rem;
+  }
+
+  .section-break .line {
+    width: 30px;
+    height: 1px;
+    background: #ccc;
+  }
+
+  .section-break .diamond {
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+    transform: rotate(45deg);
+    opacity: 0.6;
+  }
+
+  /* ──────── DARK SECTION (opening paragraphs) ──────── */
+  .dark-essay {
+    background: var(--bg-start);
+    padding: 6rem 2rem 0;
+  }
+
+  .dark-essay .essay-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .dark-essay .para {
+    color: #a0a0a0;
+  }
+
+  .dark-essay .gps-voice {
+    color: #ccc;
+    background: rgba(255,255,255,0.05);
+    border-left-color: var(--accent);
+  }
+
+  .dark-essay .quiet-emphasis {
+    color: var(--accent);
+    opacity: 0.85;
+  }
+
+  .dark-essay .section-break .line {
+    background: #333;
+  }
+
+  /* ──────── FOOTER ──────── */
+  .footer {
+    background: var(--bg-end);
+    padding: 6rem 2rem 3rem;
+    text-align: center;
+  }
+
+  .footer-mark {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #bbb;
+  }
+
+  .footer-author {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: #8b7355;
+    letter-spacing: 0.04em;
+    margin-bottom: 2rem;
+  }
+
+  /* ──────── RESPONSIVE ──────── */
+  @media (max-width: 600px) {
+    .hero { padding: 2rem 1.5rem; }
+    .dark-essay, .essay { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .always-block { padding-left: 1rem; }
+    .dark-to-light { height: 30vh; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+  <div class="route-lines">
+    <svg viewBox="0 0 1000 800" preserveAspectRatio="none">
+      <path class="route-line" d="M-50,200 C200,180 300,400 500,350 S700,100 900,300 L1050,280" />
+      <path class="route-line" d="M-50,500 C150,480 350,600 500,500 S750,350 900,550 L1050,520" />
+      <path class="route-line" d="M-50,650 C250,630 400,700 600,620 S800,580 1050,660" />
+    </svg>
+  </div>
+  <h1 class="hero-title">Recalculating</h1>
+  <p class="hero-subtitle">On knowing where you stand</p>
+  <div class="scroll-cue">
+    <span>Read</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- ════════ DARK OPENING ════════ -->
+<section class="dark-essay">
+  <div class="essay-inner">
+
+    <p class="para">
+      Life, for many, is like trying to get to your favorite restaurant using a GPS that doesn't know where you are. You trust it — why wouldn't you? — and you follow every instruction.
+    </p>
+
+    <p class="para">
+      <span class="gps-voice">"Turn left."</span> You turn left. <span class="gps-voice">"Continue straight."</span> You continue straight.
+    </p>
+
+    <p class="para">
+      At first, nothing seems wrong. You're moving. You're progressing. The map updates. The voice stays confident.
+    </p>
+
+    <div class="section-break"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <p class="para">
+      But then a subtle tension creeps in. You notice the scenery doesn't quite match what you expected. The turns feel slightly off. The timing feels strange — too early, too late.
+    </p>
+
+    <p class="para">
+      You assume the problem can't be the GPS. It's authoritative. It sounds certain. Everyone else is using one too. So you double down. You follow the directions more carefully. You stop questioning. You override your instincts when they whisper, <span class="quiet-emphasis">"This feels wrong."</span>
+    </p>
+
+    <div class="section-break"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <p class="para">
+      Along the way, you find places that are decent. Sometimes even really good. Good food. Good company. Good moments. Enough to explain why you're not unhappy. Enough to justify staying longer than you planned.
+    </p>
+
+    <p class="para">
+      But never quite enough to quiet the feeling that something is missing.
+    </p>
+
+  </div>
+</section>
+
+<!-- ════════ TRANSITION ════════ -->
+<div class="dark-to-light"></div>
+
+<!-- ════════ LIGHT ESSAY ════════ -->
+<section class="essay">
+  <div class="essay-inner">
+
+    <p class="para">
+      Occasionally, you wonder if you made a wrong turn somewhere — but the GPS never says you did. It just recalculates.
+    </p>
+
+    <div class="recalculate-group">
+      <span class="recalculate">And recalculates.</span>
+      <span class="recalculate">And recalculates.</span>
+    </div>
+
+    <p class="para">
+      You're always <span class="quiet-emphasis">"five minutes away."</span> Always <span class="quiet-emphasis">"almost there."</span> Always one more turn from arrival.
+    </p>
+
+    <div class="section-break"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <p class="para">
+      Years pass like this. From the outside, it looks like you're doing everything right. You followed the instructions. You stayed on the road. You didn't give up.
+    </p>
+
+    <p class="para">
+      Yet somehow… you never arrive.
+    </p>
+
+    <p class="para">
+      Not because the destination was unrealistic. Not because you lacked discipline, intelligence, or effort. But because <span class="strong-emphasis">the system guiding you never had your true location to begin with</span>.
+    </p>
+
+    <div class="section-break"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <p class="para">
+      When you don't know where you're standing, every direction becomes suspect — no matter how precise it sounds. No amount of optimization can fix a mislocated starting point. No better route can compensate for a false orientation.
+    </p>
+
+    <p class="para">
+      And so life becomes a series of near-misses.
+    </p>
+
+    <div class="near-misses">
+      <span>Almosts</span><span class="dot-sep"></span>
+      <span>Good-enoughs</span><span class="dot-sep"></span>
+      <span>Temporary satisfactions</span>
+    </div>
+
+    <p class="para">
+      That quietly exhaust you.
+    </p>
+
+    <div class="section-break"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+    <!-- The Pivot -->
+    <div class="pivot para">
+      <p class="pivot-question">
+        Until one day, a different question arises — not <span class="quiet-emphasis">"What's the right direction?"</span> but:
+        <span class="inner-q">"Wait… where am I actually starting from?"</span>
+      </p>
+    </div>
+
+    <!-- Closing -->
+    <div class="closing">
+      <p class="closing-text">
+        That question changes everything.
+        <span class="closing-final">
+          Because the moment your true location is known,<br>
+          the destination was never as far away as it seemed.
+        </span>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <p class="footer-author">Written by Justin Kon</p>
+  <span class="footer-mark">◆</span>
+</footer>
+
+<script>
+  // Content is visible by default — no JS required
+</script>
+
+</body>
+</html>
