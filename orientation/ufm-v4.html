@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Freedom Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Libre+Franklin:wght@200;300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a84c;
+  --gold-dim: #a0813a;
+  --gold-glow: #e8c96880;
+  --bone: #e8e0d0;
+  --smoke: #9a9590;
+  --deep: #0d0c0a;
+  --warm-black: #100f0d;
+  --text-primary: #d4cdc2;
+  --text-dim: #7a7570;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--gold-dim) var(--deep); }
+body {
+  background: var(--deep);
+  color: var(--text-primary);
+  font-family: 'Libre Franklin', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+.letterbox-top, .letterbox-bottom {
+  position: fixed; left: 0; right: 0; height: 4vh; background: #000; z-index: 100; pointer-events: none;
+}
+.letterbox-top { top: 0; }
+.letterbox-bottom { bottom: 0; }
+
+nav {
+  position: fixed; top: 4vh; left: 0; right: 0; z-index: 90;
+  padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center;
+  mix-blend-mode: difference;
+}
+nav .logo { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--bone); }
+nav .scroll-indicator { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--smoke); }
+
+/* ===================== HERO ===================== */
+.hero {
+  height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--gold-glow), transparent 70%);
+  opacity: 0.08; animation: heroPulse 8s ease-in-out infinite;
+}
+@keyframes heroPulse {
+  0%, 100% { opacity: 0.06; transform: scale(1); }
+  50% { opacity: 0.12; transform: scale(1.05); }
+}
+.hero-line { width: 1px; height: 0; background: var(--gold-dim); position: absolute; top: 15%; animation: lineGrow 2s ease-out 0.5s forwards; }
+@keyframes lineGrow { to { height: 12vh; } }
+.hero-pre {
+  font-size: 0.92rem; font-weight: 300; color: var(--smoke); margin-bottom: 1.2rem;
+  opacity: 0; animation: fadeUp 1.2s ease-out 1.5s forwards; letter-spacing: 0.02em;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(3rem, 8vw, 7.5rem);
+  line-height: 1.05; text-align: center; letter-spacing: -0.02em; color: var(--bone);
+  max-width: 900px; padding: 0 2rem; opacity: 0; animation: fadeUp 1.5s ease-out 2s forwards;
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-sub {
+  font-size: 1.05rem; color: var(--text-primary); margin-top: 2.5rem; font-weight: 300;
+  opacity: 0; animation: fadeUp 1.2s ease-out 2.8s forwards;
+  max-width: 560px; text-align: center; padding: 0 2rem; line-height: 1.7;
+}
+.hero-positioning {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--gold-dim); margin-top: 2rem; opacity: 0; animation: fadeUp 1s ease-out 3.4s forwards;
+}
+.scroll-cue {
+  position: absolute; bottom: 8vh; display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+  opacity: 0; animation: fadeUp 1s ease-out 4s forwards;
+}
+.scroll-cue span { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); }
+.scroll-cue .line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gold-dim), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+@keyframes scrollPulse { 0%, 100% { opacity: 0.3; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(1.3); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===================== CHAPTERS ===================== */
+.chapter { min-height: 100vh; padding: 15vh 2rem; display: flex; justify-content: center; position: relative; }
+.chapter.short { min-height: auto; padding: 8vh 2rem; }
+.chapter.med { min-height: auto; padding: 12vh 2rem; }
+.chapter-inner { max-width: 760px; width: 100%; }
+.chapter-num { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1rem; }
+.chapter-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1.15; color: var(--bone); margin-bottom: 3rem; letter-spacing: -0.01em; }
+.chapter-title em { font-style: italic; color: var(--gold); }
+.chapter-title.sm { font-size: clamp(1.5rem, 3.5vw, 2.5rem); }
+.chapter p { font-size: 1.05rem; margin-bottom: 1.8rem; color: var(--text-primary); font-weight: 300; }
+.chapter p.accent {
+  color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400;
+  font-style: italic; line-height: 1.5; border-left: 1px solid var(--gold-dim); padding-left: 1.5rem; margin: 3rem 0;
+}
+.chapter p.dim { color: var(--text-dim); font-size: 0.95rem; }
+
+/* ===================== SPINE ===================== */
+.spine-section { padding: 6vh 2rem; display: flex; justify-content: center; }
+.spine-inner {
+  max-width: 760px; text-align: center; padding: 3rem 2rem;
+  border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+.spine-inner p {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 400; color: var(--bone); line-height: 1.6; letter-spacing: 0.01em;
+}
+
+/* ===================== DIVIDER ===================== */
+.divider { display: flex; align-items: center; justify-content: center; padding: 4rem 0; }
+.divider::before { content: ''; width: 60px; height: 1px; background: var(--gold-dim); opacity: 0.4; }
+
+/* ===================== REVEAL ===================== */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s ease-out, transform 0.9s ease-out; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.3s; }
+.reveal-delay-3 { transition-delay: 0.45s; }
+
+/* ===================== QUOTE ===================== */
+.quote-section {
+  min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center;
+  padding: 10vh 2rem; position: relative;
+}
+.quote-section.compact { min-height: 50vh; }
+.quote-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.04), transparent); }
+.quote-section blockquote {
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 4vw, 3rem); font-weight: 300;
+  line-height: 1.4; color: var(--bone); max-width: 800px; font-style: italic;
+}
+.quote-section blockquote strong { color: var(--gold); font-weight: 400; }
+
+/* ===================== THREE MODES ===================== */
+.modes-section { padding: 10vh 2rem; }
+.modes-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.mode-card {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(201,168,76,0.08);
+  padding: 3.5rem 2.5rem; position: relative; overflow: hidden; transition: background 0.5s, border-color 0.5s;
+}
+.mode-card:hover { background: rgba(201,168,76,0.03); border-color: rgba(201,168,76,0.15); }
+.mode-card .mode-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: rgba(201,168,76,0.12); position: absolute; top: 1rem; right: 1.5rem; line-height: 1; }
+.mode-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; color: var(--bone); margin-bottom: 1.2rem; }
+.mode-card p { font-size: 0.92rem; color: var(--smoke); line-height: 1.7; font-weight: 300; }
+
+/* ===================== FRAMEWORK ===================== */
+.framework-section { padding: 10vh 2rem 15vh; }
+.framework-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; }
+.fw-element {
+  text-align: center; padding: 2.5rem 1rem; border: 1px solid rgba(201,168,76,0.06);
+  transition: all 0.5s; cursor: default; position: relative;
+}
+.fw-element:hover { background: rgba(201,168,76,0.04); border-color: rgba(201,168,76,0.15); }
+.fw-element .fw-num { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.3em; color: var(--gold-dim); margin-bottom: 0.8rem; opacity: 0.6; }
+.fw-element h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; color: var(--bone); letter-spacing: 0.02em; }
+.fw-element .fw-desc {
+  margin-top: 0.8rem; font-size: 0.75rem; color: var(--text-dim); line-height: 1.6; font-weight: 300;
+  max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s ease, opacity 0.4s ease, margin-top 0.4s ease;
+}
+.fw-element:hover .fw-desc { max-height: 120px; opacity: 1; margin-top: 1rem; }
+.fw-element .fw-under { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; color: var(--gold-dim); opacity: 0; transition: opacity 0.4s ease; margin-top: 0.6rem; }
+.fw-element:hover .fw-under { opacity: 0.6; }
+
+/* ===================== LOOP ===================== */
+.loop-section { padding: 8vh 2rem; display: flex; justify-content: center; }
+.loop-visual { display: flex; align-items: center; gap: 0; flex-wrap: wrap; justify-content: center; max-width: 900px; }
+.loop-step { padding: 1rem 1.8rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; color: var(--smoke); border: 1px solid rgba(201,168,76,0.1); transition: all 0.4s; }
+.loop-step:hover { color: var(--gold); border-color: var(--gold-dim); }
+.loop-arrow { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold-dim); padding: 0 0.5rem; opacity: 0.4; }
+
+/* ===================== INTERLUDE ===================== */
+.interlude {
+  min-height: 60vh; display: flex; align-items: center; justify-content: center;
+  background: var(--warm-black); position: relative;
+  border-top: 1px solid rgba(201,168,76,0.05); border-bottom: 1px solid rgba(201,168,76,0.05);
+}
+.interlude.compact { min-height: auto; padding: 8vh 0; }
+.interlude-content { text-align: center; max-width: 600px; padding: 0 2rem; }
+.interlude-content h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3.5vw, 2.5rem); font-weight: 300; color: var(--bone); margin-bottom: 1.5rem; line-height: 1.3; }
+.interlude-content p { font-size: 0.95rem; color: var(--smoke); font-weight: 300; line-height: 1.8; }
+.interlude-content p + p { margin-top: 1.2rem; }
+
+/* ===================== FORMULA ===================== */
+.formula { text-align: center; padding: 6vh 2rem; }
+.formula-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 300; color: var(--bone); letter-spacing: 0.05em; }
+.formula-text .op { color: var(--gold-dim); padding: 0 0.8rem; }
+.formula-text .result { color: var(--gold); font-style: italic; }
+.formula-sub { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); margin-top: 1.5rem; }
+
+/* ===================== WARNINGS ===================== */
+.warning-section { padding: 10vh 2rem; max-width: 760px; margin: 0 auto; }
+.warning-item { padding: 2rem 0; border-bottom: 1px solid rgba(201,168,76,0.06); }
+.warning-item:last-child { border-bottom: none; }
+.warning-item h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; color: var(--bone); margin-bottom: 0.8rem; }
+.warning-item p { font-size: 0.92rem; color: var(--smoke); line-height: 1.7; font-weight: 300; }
+
+/* ===================== VIGNETTE ===================== */
+.vignette { padding: 10vh 2rem; display: flex; justify-content: center; }
+.vignette-inner { max-width: 700px; width: 100%; border-left: 1px solid rgba(201,168,76,0.15); padding-left: 2.5rem; }
+.vignette-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 2rem; opacity: 0.7; }
+.vignette-inner p { font-size: 1rem; color: var(--text-primary); font-weight: 300; line-height: 1.85; margin-bottom: 1.5rem; }
+.vignette-inner p.v-stage { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 0.5rem; margin-top: 2.5rem; }
+.vignette-inner p.v-stage:first-of-type { margin-top: 0; }
+.vignette-inner p.v-dim { color: var(--smoke); font-size: 0.92rem; }
+.vignette-inner p.v-result { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; line-height: 1.6; margin-top: 2rem; }
+
+/* ===================== AUDIENCE ===================== */
+.audience-section { padding: 10vh 2rem; display: flex; justify-content: center; }
+.audience-inner { max-width: 760px; width: 100%; text-align: center; }
+.audience-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3vw, 2.4rem); font-weight: 300; color: var(--bone); margin-bottom: 3rem; line-height: 1.3; }
+.audience-traits { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 3rem; text-align: left; margin-bottom: 2.5rem; }
+.trait { padding: 1.2rem 0; border-bottom: 1px solid rgba(201,168,76,0.06); }
+.trait p { font-size: 0.95rem; color: var(--text-primary); font-weight: 300; line-height: 1.6; }
+.trait p .trait-but { color: var(--gold-dim); }
+.audience-note { font-size: 0.88rem; color: var(--text-dim); font-weight: 300; max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+/* ===================== HUMILITY ===================== */
+.humility-section { padding: 8vh 2rem; display: flex; justify-content: center; }
+.humility-inner { max-width: 620px; text-align: center; }
+.humility-inner p { font-size: 0.95rem; color: var(--smoke); font-weight: 300; line-height: 1.85; font-style: italic; }
+.humility-inner p .h-em { color: var(--text-primary); font-style: normal; }
+
+/* ===================== MICRO-PRACTICE ===================== */
+.practice-section {
+  padding: 8vh 2rem; display: flex; justify-content: center;
+}
+.practice-inner {
+  max-width: 520px; text-align: center; padding: 3.5rem 3rem;
+  border: 1px solid rgba(201,168,76,0.1);
+  background: rgba(201,168,76,0.015);
+}
+.practice-label {
+  font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.5em;
+  text-transform: uppercase; color: var(--gold-dim); margin-bottom: 2rem;
+}
+.practice-inner p {
+  font-size: 1rem; color: var(--text-primary); font-weight: 300; line-height: 1.9; margin-bottom: 1rem;
+}
+.practice-inner p:last-child { margin-bottom: 0; }
+.practice-inner p.practice-em {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--gold);
+  font-style: italic; margin-top: 1.5rem;
+}
+
+/* ===================== DESTABILIZER ===================== */
+.destabilizer {
+  padding: 6vh 2rem; display: flex; justify-content: center;
+}
+.destabilizer-inner {
+  max-width: 620px; text-align: center;
+}
+.destabilizer-inner p {
+  font-size: 0.92rem; color: var(--smoke); font-weight: 300; line-height: 1.8;
+}
+
+/* ===================== DOORWAY ===================== */
+.doorway { padding: 12vh 2rem; display: flex; justify-content: center; position: relative; }
+.doorway::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 40% 50% at 50% 50%, rgba(201,168,76,0.04), transparent); }
+.doorway-inner { text-align: center; max-width: 500px; position: relative; }
+.doorway-inner .doorway-line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--gold-dim)); margin: 0 auto 2.5rem; }
+.doorway-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; color: var(--bone); margin-bottom: 1.5rem; line-height: 1.4; }
+.doorway-inner p { font-size: 0.9rem; color: var(--smoke); font-weight: 300; line-height: 1.8; margin-bottom: 2.5rem; }
+.doorway-cta {
+  display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.35em;
+  text-transform: uppercase; color: var(--gold); padding: 1.1rem 3rem; border: 1px solid var(--gold-dim);
+  text-decoration: none; transition: all 0.5s ease; cursor: pointer; background: transparent;
+  position: relative; overflow: hidden;
+}
+.doorway-cta::before { content: ''; position: absolute; inset: 0; background: var(--gold); opacity: 0; transition: opacity 0.5s ease; }
+.doorway-cta:hover { color: var(--deep); border-color: var(--gold); }
+.doorway-cta:hover::before { opacity: 1; }
+.doorway-cta span { position: relative; z-index: 1; }
+
+/* ===================== FINALE ===================== */
+.finale {
+  min-height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 10vh 2rem; position: relative;
+}
+.finale::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 50% at 50% 60%, rgba(201,168,76,0.06), transparent); }
+.finale h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 4rem); font-weight: 300; line-height: 1.2; color: var(--bone); max-width: 700px; margin-bottom: 2rem; position: relative; }
+.finale h2 em { font-style: italic; color: var(--gold); }
+.finale p { font-size: 1rem; color: var(--smoke); max-width: 480px; font-weight: 300; line-height: 1.8; position: relative; }
+.finale p + p { margin-top: 1rem; }
+.finale p.finale-voltage { color: var(--text-primary); font-size: 1.05rem; }
+.finale .end-mark { width: 6px; height: 6px; background: var(--gold-dim); border-radius: 50%; margin-top: 4rem; position: relative; }
+
+footer {
+  padding: 4rem 3rem; border-top: 1px solid rgba(201,168,76,0.06);
+  display: flex; justify-content: space-between; align-items: center;
+}
+footer span { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+  .modes-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .framework-grid { grid-template-columns: repeat(2, 1fr); }
+  .loop-visual { flex-direction: column; }
+  .loop-arrow { transform: rotate(90deg); }
+  nav { padding: 1rem 1.5rem; }
+  .mode-card { padding: 2.5rem 2rem; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; }
+  .audience-traits { grid-template-columns: 1fr; }
+  .vignette-inner { padding-left: 1.5rem; }
+  .practice-inner { padding: 2.5rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="letterbox-top"></div>
+<div class="letterbox-bottom"></div>
+
+<nav>
+  <div class="logo">UFM</div>
+  <div class="scroll-indicator" id="scrollIndicator">00 — Overture</div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-line"></div>
+  <div class="hero-pre">You already sense that something else is driving.</div>
+  <h1>Ultimate Freedom <em>Mastery</em></h1>
+  <p class="hero-sub">A structural system for seeing the defensive identity that runs your decisions, stepping outside of it, and consciously re-entering your life.</p>
+  <div class="hero-positioning">Identity architecture for conscious participation</div>
+  <div class="scroll-cue">
+    <span>Begin</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- ==================== SPINE ==================== -->
+<section class="spine-section reveal">
+  <div class="spine-inner">
+    <p>UFM exists because most adults are unconsciously governed by a defensive identity formed before they had conscious choice — and no amount of optimization, regulation, or insight changes that until the identity itself is seen.</p>
+  </div>
+</section>
+
+<!-- ==================== 01 — WHY NOW ==================== -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">01 — Why Now</div>
+    <h2 class="chapter-title reveal reveal-delay-1">The world got <em>faster.</em> You didn't get <em>clearer.</em></h2>
+    <p class="reveal reveal-delay-2">You know the feeling. The notification that tightens your chest before you read it. The argument you rehearse at 2am against someone who isn't in the room. The success that should feel like enough but doesn't. The exhaustion that isn't about hours — it's about running a program you didn't write and can't seem to stop.</p>
+    <p class="reveal reveal-delay-3">This is happening at scale. Feeds optimized for outrage. Polarization as identity fusion operating at a civilizational level. Burnout cultures that reward the threatened self's productivity loop. The interventions keep coming — breathe, journal, set boundaries — and they help. But they don't address the structural problem: the self that needs regulating was never examined.</p>
+    <p class="accent reveal">This is not a calmer era that lost its way. This is a hyper-reactive era that never had the architecture to meet itself.</p>
+  </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<!-- ==================== 02 — CORE OBSERVATION ==================== -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">02 — The Core Observation</div>
+    <h2 class="chapter-title reveal reveal-delay-1">Most people do not <em>meet</em> reality</h2>
+    <p class="reveal reveal-delay-2">They meet their memory of it. Past experiences, identity structures, unconscious threat detection, social conditioning — perception is filtered before awareness even arrives. This produces friction. Not the friction of life being hard. The friction of living inside a story you never chose.</p>
+    <p class="accent reveal reveal-delay-3">The human organism develops a defensive identity that believes it is separate, vulnerable, and incomplete. We call this the Threatened Self.</p>
+    <p class="reveal">It sounds like: "I must protect myself. I must prove myself. I must secure love. I must avoid humiliation. I must control outcomes." This structure is adaptive in childhood. But when it runs unconscious in adulthood, it runs everything.</p>
+  </div>
+</section>
+
+<!-- ==================== HUMILITY — Early placement ==================== -->
+<section class="humility-section reveal">
+  <div class="humility-inner">
+    <p>A note on honesty. <span class="h-em">This system was not built from above the problem. It was built from inside it.</span> The threatened self described here is not an abstraction — it is the thing that had to be met, again and again, in the person who built this. UFM does not come from having transcended the loop. It comes from having run it enough times to finally see it clearly. That is the only authority it claims.</p>
+  </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<!-- ==================== 03 — THE LOOP ==================== -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">03 — The Loop</div>
+    <h2 class="chapter-title reveal reveal-delay-1">The architecture of <em>stuckness</em></h2>
+    <p class="reveal reveal-delay-2">When identity is fused with threat, it creates a closed system. The same structure drives addiction, political polarization, and relationship conflict. Different content — identical architecture.</p>
+  </div>
+</section>
+
+<section class="loop-section">
+  <div class="loop-visual reveal">
+    <div class="loop-step">Identity</div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step">Orientation</div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step">Emotion</div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step">Behavior</div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-step">Reinforcement</div>
+  </div>
+</section>
+
+<section class="chapter short">
+  <div class="chapter-inner">
+    <p class="dim reveal">"I am not enough" → reality appears competitive → anxiety activates → you overwork or withdraw → short-term relief reinforces the belief. The loop completes. The loop repeats.</p>
+  </div>
+</section>
+
+<!-- ==================== DRIVERS ==================== -->
+<section class="quote-section reveal">
+  <blockquote>Every action can be traced to seeking <strong>peace</strong>, seeking <strong>love</strong>, or seeking <strong>happiness</strong> — even the destructive ones. The mistake is outsourcing these states to circumstances.</blockquote>
+</section>
+
+<!-- ==================== 04 — THREE MODES ==================== -->
+<section class="chapter">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">04 — Three Modes of Experience</div>
+    <h2 class="chapter-title reveal reveal-delay-1">The Spiritual <em>Two-Step</em></h2>
+    <p class="reveal reveal-delay-2">Most contemplative systems stop at non-attachment. UFM insists you come back. Step one: Human to Being. Step two: Being to Human Being. The return is the point.</p>
+  </div>
+</section>
+
+<section class="modes-section">
+  <div class="modes-grid">
+    <div class="mode-card reveal">
+      <div class="mode-num">I</div>
+      <h3>Human</h3>
+      <p>Reactive. Overrun or overcontrolled by emotion. Fused with identity. Operating from a program written in childhood, running unchecked in adulthood.</p>
+    </div>
+    <div class="mode-card reveal reveal-delay-1">
+      <div class="mode-num">II</div>
+      <h3>Being</h3>
+      <p>Non-fusion. Witnessing without suppression. Emotional activation is seen, not obeyed. Space appears between stimulus and response. You notice you are not the reaction.</p>
+    </div>
+    <div class="mode-card reveal reveal-delay-2">
+      <div class="mode-num">III</div>
+      <h3>Human Being</h3>
+      <p>Activation integrated into deliberate action. Identity chosen consciously. Behavior aligned with values. You still play the game — but you know you're playing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== DEFINITION OF BEING ==================== -->
+<section class="chapter short">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">A Clarification</div>
+    <h2 class="chapter-title sm reveal reveal-delay-1">What <em>"Being"</em> means operationally</h2>
+    <p class="reveal reveal-delay-2">Being is not a metaphysical claim. It is a functional state: the capacity to observe activation without acting from it. When you notice anger arising and do not become the angry person — that gap is Being. It is not emptiness. It is not transcendence. It is the part of you that was present before the story started, and remains present when the story pauses. Operationally, it is the difference between "I am furious" and "Fury is present." One fuses. The other locates. UFM trains the second.</p>
+    <p class="dim reveal reveal-delay-3">This is not mindfulness. Mindfulness observes experience. UFM relocates the seat of identity and reconstructs participation from there. Observation is the starting point — not the destination.</p>
+  </div>
+</section>
+
+<!-- ==================== 05 — FORMULA ==================== -->
+<section class="chapter short">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">05 — The Generative Engine</div>
+    <h2 class="chapter-title reveal reveal-delay-1">Three states you produce — <em>not</em> acquire</h2>
+    <p class="reveal reveal-delay-2">Most people treat peace, love, and happiness as outcomes — things earned by the right circumstances, the right relationship, the right achievement. UFM treats them as generative capacities: internal operations you can run deliberately, regardless of condition. That is a mechanical claim, not a motivational one. When the system is trained, these states become available under activation — not as moods, but as orientations you can deploy.</p>
+  </div>
+</section>
+
+<section class="formula reveal">
+  <div class="formula-text">
+    Peace <span class="op">+</span> Love <span class="op">+</span> Happiness <span class="op">=</span> <span class="result">Ultimate Freedom</span>
+  </div>
+  <div class="formula-sub">Generative operations — not emotional rewards</div>
+</section>
+
+<div class="divider reveal"></div>
+
+<!-- ==================== 06 — FRAMEWORK ==================== -->
+<section class="chapter short">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">06 — The Framework</div>
+    <h2 class="chapter-title reveal reveal-delay-1">Ten elements. <em>Three</em> depths each.</h2>
+    <p class="reveal reveal-delay-2">Each element operates at Shadow (programmed), Empowered (conscious), and Mastery (integrated) levels. This creates diagnostics, not dogma. You don't tell someone what to think. You help them see where they're standing. Hover to see each element under pressure.</p>
+  </div>
+</section>
+
+<section class="framework-section">
+  <div class="framework-grid">
+    <div class="fw-element reveal">
+      <div class="fw-num">Meta</div><h4>Oneness</h4>
+      <div class="fw-desc">Separation is perceptual, not ultimate. Under pressure, this prevents dehumanizing the other side. Not "everything is love." A structural recognition.</div>
+      <div class="fw-under">Shadow → Isolation</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">01</div><h4>Acceptance</h4>
+      <div class="fw-desc">Under activation: stops the war with what is. Does not mean approval. Means you stop burning energy denying reality before you respond to it.</div>
+      <div class="fw-under">Shadow → Resistance</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">02</div><h4>Presence</h4>
+      <div class="fw-desc">Under activation: returns attention to this moment. Interrupts the rehearsal of future threat and the replay of past failure. The only point of contact with reality.</div>
+      <div class="fw-under">Shadow → Dissociation</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">03</div><h4>Clarity</h4>
+      <div class="fw-desc">Under activation: separates signal from noise. What is actually happening vs. what the threatened self is projecting? Cuts through narrative fog in real time.</div>
+      <div class="fw-under">Shadow → Confusion</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">04</div><h4>Authenticity</h4>
+      <div class="fw-desc">Under activation: stops performing for approval. Reveals the gap between what you're doing and what you actually feel. The end of strategic self-presentation.</div>
+      <div class="fw-under">Shadow → Masking</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">05</div><h4>Harmony</h4>
+      <div class="fw-desc">Under activation: holds tension without forcing resolution. Allows conflicting truths to coexist. Prevents premature collapse into one side of a paradox.</div>
+      <div class="fw-under">Shadow → Conflict</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">06</div><h4>Purpose</h4>
+      <div class="fw-desc">Under activation: reconnects action to meaning. Prevents drift into performative busyness. The question: does this serve what matters, or what the ego needs?</div>
+      <div class="fw-under">Shadow → Aimlessness</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">07</div><h4>Perspective</h4>
+      <div class="fw-desc">Under activation: zooms out. Turns "this is a catastrophe" into "this is a moment." Not minimizing — recontextualizing. Reduces the gravitational pull of panic.</div>
+      <div class="fw-under">Shadow → Tunnel vision</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">08</div><h4>Growth</h4>
+      <div class="fw-desc">Under activation: turns friction into signal. What is this situation revealing about my operating system? Converts pain into information without bypassing it.</div>
+      <div class="fw-under">Shadow → Stagnation</div>
+    </div>
+    <div class="fw-element reveal">
+      <div class="fw-num">09</div><h4>Flow</h4>
+      <div class="fw-desc">Under activation: releases the need to control outcome. Allows action to emerge from alignment rather than force. The system moves through you, not by you.</div>
+      <div class="fw-under">Shadow → Rigidity</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 07 — POWERPLAYS ==================== -->
+<section class="interlude reveal">
+  <div class="interlude-content">
+    <h2>Powerplays</h2>
+    <p>When activated emotionally, instead of reacting — you deploy structure. You select elements deliberately under pressure and use them to interrupt the loop before it completes.</p>
+    <p>Concrete example: You're about to send a reactive message. You notice the activation. You deploy Acceptance — the situation is what it is. Presence — you return to this moment, not the story. Clarity — you separate what happened from what your threatened self is projecting. The loop interrupts. The next action comes from choice, not programming. That sequence is a Powerplay.</p>
+  </div>
+</section>
+
+<!-- ==================== 08 — VIGNETTE ==================== -->
+<section class="chapter short">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">08 — Under Pressure</div>
+    <h2 class="chapter-title reveal reveal-delay-1">What this <em>looks like</em></h2>
+  </div>
+</section>
+
+<section class="vignette reveal">
+  <div class="vignette-inner">
+    <div class="vignette-label">A Scenario</div>
+
+    <p class="v-stage">The Situation</p>
+    <p>A founder receives a message from their co-founder at 11pm. It's a list of criticisms about their leadership — sent to the entire board. The throat tightens. Heat rises behind the eyes. The fingers hover over the keyboard. The draft reply is already forming: defensive, surgical, devastating.</p>
+
+    <p class="v-stage">Human — The Reactive Mode</p>
+    <p class="v-dim">The threatened self activates: "I'm being undermined. I must defend myself. I must win this." The story collapses into survival. The email gets written in twelve minutes. It's brilliant. It's also a grenade. Sent. The loop reinforces: threat perceived, threat answered, identity preserved. Nothing changes structurally.</p>
+
+    <p class="v-stage">Being — The Gap</p>
+    <p class="v-dim">The founder closes the laptop. Not to suppress — to notice. The heat is still there. The defensive narrative is still running. But there is a space between the activation and the action. They see the threatened self performing. They don't obey it. Not yet.</p>
+
+    <p class="v-stage">Human Being — The Conscious Return</p>
+    <p class="v-dim">The next morning, the activation has metabolized. Clarity reveals what's real: there are legitimate concerns buried in the attack. Acceptance allows them to exist without collapsing identity. Perspective recontextualizes: this is a partnership under stress, not a war. The reply is measured, honest, and structural. It addresses the concerns. It also sets a boundary. No grenade. No surrender.</p>
+
+    <p class="v-result">Same person. Same nervous system. Different seat of identity. That's the difference UFM trains.</p>
+  </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<!-- ==================== 09 — WARNINGS ==================== -->
+<section class="chapter short">
+  <div class="chapter-inner">
+    <div class="chapter-num reveal">09 — What You Must Know</div>
+    <h2 class="chapter-title reveal reveal-delay-1">The territory <em>beneath</em> the map</h2>
+  </div>
+</section>
+
+<section class="warning-section">
+  <div class="warning-item reveal">
+    <h3>It is confrontational — even when gentle</h3>
+    <p>UFM exposes where you are outsourcing peace, protecting identity, manipulating perception, and addicted to threat. It does not attack you. But it destabilizes false certainty. That feels like loss before it feels like freedom.</p>
+  </div>
+  <div class="warning-item reveal">
+    <h3>It does not promise emotional permanence</h3>
+    <p>Anger still happens. Grief still happens. Stress still happens. The difference is that activation no longer defines identity. The threatened self doesn't disappear — it gets relocated from CEO to advisor.</p>
+  </div>
+  <div class="warning-item reveal">
+    <h3>There is no final form</h3>
+    <p>No permanent enlightenment state. No completed identity. No finished orientation. Only increasing stability in non-fusion and increasing coherence in participation. It is not a ladder. It is a training field.</p>
+  </div>
+  <div class="warning-item reveal">
+    <h3>It changes your incentive structure</h3>
+    <p>Status loses charge. Proving loses charge. Career decisions shift. Relationship dynamics shift. This doesn't make someone passive — it makes their ambition cleaner. Some relationships change. Some conversations feel thinner. Some illusions dissolve.</p>
+  </div>
+  <div class="warning-item reveal">
+    <h3>It requires capacity — not just insight</h3>
+    <p>During severe trauma response or nervous system overload, reflective choice may not be accessible. The system integrates nervous system literacy and physiological stabilization alongside identity work. Without both, it risks becoming idealistic.</p>
+  </div>
+  <div class="warning-item reveal">
+    <h3>The system is only as safe as the instructor</h3>
+    <p>Because UFM destabilizes identification, it requires psychological literacy, nervous system awareness, ethical grounding, and clear sequencing. The system itself is neutral. The application is not.</p>
+  </div>
+</section>
+
+<!-- ==================== 10 — THE REAL TEST ==================== -->
+<section class="quote-section reveal">
+  <blockquote>The real test is not how it feels in meditation or how coherent the architecture is. It is: does it hold during <strong>betrayal</strong>, public criticism, financial threat, illness, <strong>death</strong>?</blockquote>
+</section>
+
+<!-- ==================== 11 — WHAT IT IS NOT ==================== -->
+<section class="interlude compact reveal">
+  <div class="interlude-content">
+    <h2>What UFM is not</h2>
+    <p>Not therapy. Not generic coaching. Not belief replacement. Not bypassing. Not personality optimization. It destabilizes false identification and reintegrates the human system consciously. It does not assume realization fixes conditioning. It does not assume conditioning fixes realization. It integrates both.</p>
+  </div>
+</section>
+
+<!-- ==================== SURGICAL DESTABILIZER ==================== -->
+<section class="destabilizer reveal">
+  <div class="destabilizer-inner">
+    <p>A note for the reader who has followed every word and already feels they understand this. Most people who encounter this architecture will recognize it — and quietly assume they are already operating outside the loop. That recognition is the threatened self's most elegant move: understanding the system well enough to believe it doesn't apply. Conceptual clarity is not embodiment. If you felt no friction reading this, look again.</p>
+  </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<!-- ==================== 12 — RECOGNITION ==================== -->
+<section class="audience-section">
+  <div class="audience-inner">
+    <div class="chapter-num reveal" style="margin-bottom: 1rem;">12 — Recognition</div>
+    <h2 class="reveal reveal-delay-1">This is for people who already <em style="color: var(--gold); font-style: italic;">sense</em> it</h2>
+    <div class="audience-traits reveal reveal-delay-2">
+      <div class="trait"><p>Successful <span class="trait-but">but restless</span></p></div>
+      <div class="trait"><p>Insightful <span class="trait-but">but unintegrated</span></p></div>
+      <div class="trait"><p>Capable <span class="trait-but">but reactive under pressure</span></p></div>
+      <div class="trait"><p>Spiritually aware <span class="trait-but">but structurally ungrounded</span></p></div>
+      <div class="trait"><p>High-performing <span class="trait-but">but running on threat</span></p></div>
+      <div class="trait"><p>Done with surface fixes <span class="trait-but">but unsure what's deeper</span></p></div>
+    </div>
+    <p class="audience-note reveal reveal-delay-3">If you recognize yourself in this architecture, it was already yours. The system gives it language.</p>
+  </div>
+</section>
+
+<!-- ==================== MICRO-PRACTICE ==================== -->
+<section class="practice-section reveal">
+  <div class="practice-inner">
+    <div class="practice-label">Try this now</div>
+    <p>Notice the next thought that arises. Any thought. Instead of following it, label it: <em>"thinking."</em></p>
+    <p>Notice that you could observe the thought without becoming it.</p>
+    <p class="practice-em">That gap — however brief — is Being. You've already done the first move.</p>
+  </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<!-- ==================== 13 — THE QUESTION ==================== -->
+<section class="finale">
+  <h2 class="reveal">If you are not your defensive identity — <em>what are you?</em></h2>
+  <p class="reveal reveal-delay-1">And if that answer becomes stable — how do you want to participate in the world?</p>
+  <p class="reveal reveal-delay-2 finale-voltage">And who chooses next?</p>
+  <p class="reveal reveal-delay-3">That is the real curriculum. Everything else is scaffolding.</p>
+  <div class="end-mark reveal reveal-delay-3"></div>
+</section>
+
+<!-- ==================== THE DOORWAY ==================== -->
+<section class="doorway reveal">
+  <div class="doorway-inner">
+    <div class="doorway-line"></div>
+    <h2>The architecture is here.<br>The question is whether you enter it.</h2>
+    <p>UFM begins with a single diagnostic: where is the threatened self currently driving? That is the first orientation. Everything builds from there.</p>
+    <a class="doorway-cta" href="#"><span>Begin the Orientation</span></a>
+  </div>
+</section>
+
+<footer>
+  <span>Ultimate Freedom Mastery</span>
+  <span>Identity Architecture for Conscious Participation</span>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+const sections = [
+  { name: '00 — Overture', start: 0 },
+  { name: '01 — Why Now', start: 0.05 },
+  { name: '02 — Core Observation', start: 0.11 },
+  { name: '03 — The Loop', start: 0.20 },
+  { name: '04 — Three Modes', start: 0.28 },
+  { name: '05 — The Engine', start: 0.38 },
+  { name: '06 — The Framework', start: 0.43 },
+  { name: '07 — Powerplays', start: 0.52 },
+  { name: '08 — Under Pressure', start: 0.56 },
+  { name: '09 — The Territory', start: 0.63 },
+  { name: '10 — The Real Test', start: 0.73 },
+  { name: '11 — What It Is Not', start: 0.77 },
+  { name: '12 — Recognition', start: 0.82 },
+  { name: '13 — The Question', start: 0.90 },
+  { name: '14 — The Doorway', start: 0.95 }
+];
+
+const indicator = document.getElementById('scrollIndicator');
+window.addEventListener('scroll', () => {
+  const f = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  let c = sections[0].name;
+  for (const s of sections) { if (f >= s.start) c = s.name; }
+  indicator.textContent = c;
+}, { passive: true });
+</script>
+
+</body>
+</html>
