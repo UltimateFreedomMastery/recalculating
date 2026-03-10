@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Interrupt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lato:wght@100;300&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --ink: #0f0f0d;
+    --paper: #f0ebe0;
+    --paper-dark: #e0d9cc;
+    --accent: #6b5340;
+    --ghost: rgba(15, 15, 13, 0.25);
+    --fade: 1.2s ease;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--ink);
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--paper);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease, transform 0.15s ease;
+    mix-blend-mode: difference;
+  }
+
+  /* Noise grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* Main stage */
+  #stage {
+    position: fixed;
+    inset: 0;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 1.8s ease, opacity 0.8s ease;
+  }
+
+  #stage.dark {
+    background: #0d0d0b;
+  }
+
+  #stage.fade-out {
+    opacity: 0;
+  }
+
+  /* Content area */
+  #content {
+    position: relative;
+    width: min(640px, 88vw);
+    text-align: left;
+    z-index: 10;
+  }
+
+  /* Scene system */
+  .scene {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(640px, 88vw);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--fade);
+  }
+
+  .scene.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Typography */
+  .line-entry {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: clamp(10px, 1.1vw, 13px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: none;
+  }
+
+  .headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: clamp(32px, 5.5vw, 64px);
+    line-height: 1.12;
+    color: var(--ink);
+    margin-bottom: 2rem;
+  }
+
+  .headline em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .body-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(16px, 2vw, 22px);
+    line-height: 1.85;
+    color: var(--ink);
+    opacity: 0.92;
+  }
+
+  .quiet {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: clamp(12px, 1.3vw, 15px);
+    letter-spacing: 0.12em;
+    line-height: 2.6;
+    color: var(--ink);
+    opacity: 0.75;
+  }
+
+  .quiet span {
+    display: block;
+  }
+
+  .single-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(20px, 3.2vw, 38px);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  /* Dark scene text */
+  .dark-text {
+    color: var(--paper);
+    opacity: 0.9;
+  }
+
+  .dark-subtext {
+    font-family: 'Lato', sans-serif;
+    font-weight: 100;
+    font-size: clamp(11px, 1.2vw, 14px);
+    letter-spacing: 0.16em;
+    color: var(--paper);
+    opacity: 0.4;
+    margin-top: 2.5rem;
+    text-transform: uppercase;
+  }
+
+  /* Timer */
+  #timer-scene {
+    text-align: center;
+  }
+
+  #timer-scene .single-line {
+    text-align: center;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+  }
+
+  #timer-scene .dark-text {
+    text-align: center;
+  }
+
+  #countdown-ring {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 2rem;
+  }
+
+  #countdown-ring svg {
+    transform: rotate(-90deg);
+    width: 90px;
+    height: 90px;
+  }
+
+  #countdown-ring .track {
+    fill: none;
+    stroke: rgba(244, 240, 232, 0.1);
+    stroke-width: 1;
+  }
+
+  #countdown-ring .progress {
+    fill: none;
+    stroke: rgba(244, 240, 232, 0.45);
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-dasharray: 251.2;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+  }
+
+  #countdown-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 26px;
+    color: rgba(244, 240, 232, 0.6);
+    line-height: 1;
+  }
+
+  /* Separator */
+  .sep {
+    width: 1px;
+    height: 48px;
+    background: var(--ghost);
+    margin: 2.5rem 0;
+  }
+
+  .sep.light {
+    background: rgba(244, 240, 232, 0.15);
+  }
+
+  /* Reveal-in animation for text */
+  .reveal {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 1.1s ease, transform 1.1s ease;
+  }
+
+  .reveal.shown {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* CTA */
+  .cta-area {
+    margin-top: 3rem;
+  }
+
+  .cta-link {
+    font-family: 'Lato', sans-serif;
+    font-weight: 100;
+    font-size: clamp(10px, 1.1vw, 13px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 0;
+    display: inline-block;
+    transition: opacity 1.4s ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  .cta-link:hover {
+    border-bottom-color: var(--accent);
+    opacity: 1 !important;
+  }
+
+  .cta-link.shown {
+    opacity: 0.7;
+  }
+
+  .proceed-hint {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0;
+    color: var(--accent);
+    transition: opacity 1.4s ease;
+    cursor: pointer;
+    display: inline-block;
+    user-select: none;
+    margin-top: 3rem;
+  }
+
+  .proceed-hint.shown {
+    opacity: 0.6;
+  }
+
+  .proceed-hint:hover {
+    opacity: 1 !important;
+  }
+
+  /* Progress dots */
+  #progress {
+    position: fixed;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  #progress.visible {
+    opacity: 1;
+  }
+
+  .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ink);
+    opacity: 0.15;
+    transition: opacity 0.4s ease, background 0.4s ease;
+  }
+
+  .dot.active {
+    opacity: 0.55;
+  }
+
+  .dot.dark-mode {
+    background: var(--paper);
+  }
+
+  /* Scene-specific adjustments */
+  #scene-breath {
+    text-align: center;
+  }
+
+  #scene-breath .headline {
+    text-align: center;
+  }
+
+  #scene-breath .body-text {
+    text-align: center;
+  }
+
+  #scene-5 .single-line {
+    font-size: clamp(22px, 3.8vw, 44px);
+  }
+
+  /* Fade lines in sequence */
+  .seq-line {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .seq-line.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* The breath invitation */
+  .breath-instruction {
+    font-family: 'Lato', sans-serif;
+    font-weight: 100;
+    font-size: clamp(10px, 1.1vw, 12px);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(244, 240, 232, 0.35);
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<div id="stage">
+
+  <!-- Scene 0: Entry Shock -->
+  <div class="scene active" id="scene-0">
+    <div class="line-entry seq-line" id="s0-label">Before you scroll.</div>
+    <div class="headline seq-line" id="s0-h">
+      Notice what you<br>are doing.
+    </div>
+    <div class="proceed-hint shown" id="s0-proceed" onclick="nextScene()">continue</div>
+  </div>
+
+  <!-- Scene 1: Identity Mirror -->
+  <div class="scene" id="scene-1">
+    <div class="line-entry seq-line" id="s1-label">A question.</div>
+    <div class="quiet">
+      <span class="seq-line" id="s1-q1">Are you here to learn?</span>
+      <span class="seq-line" id="s1-q2">Or to feel better?</span>
+      <span class="seq-line" id="s1-q3">Or to escape something uncomfortable?</span>
+      <span class="seq-line" id="s1-q4">Or because you are restless?</span>
+    </div>
+    <div class="proceed-hint" id="s1-proceed" onclick="nextScene()">continue</div>
+  </div>
+
+  <!-- Scene 2: Present-Tense Confrontation -->
+  <div class="scene" id="scene-2">
+    <div class="line-entry seq-line" id="s2-label">Right now.</div>
+    <div class="quiet">
+      <span class="seq-line" id="s2-q1">Is your body relaxed?</span>
+      <span class="seq-line" id="s2-q2">Is your breathing shallow?</span>
+      <span class="seq-line" id="s2-q3">Are you trying to get somewhere?</span>
+    </div>
+    <div class="proceed-hint" id="s2-proceed" onclick="nextScene()">continue</div>
+  </div>
+
+  <!-- Scene 3: Exposure Moment (dark) -->
+  <div class="scene" id="scene-3" style="text-align:center;">
+    <div class="single-line dark-text seq-line" id="s3-h" style="font-size: clamp(18px,2.8vw,34px); line-height:1.7; text-align:center;">
+      Everything you chase<br>reduces to peace,<br>love, or happiness.
+    </div>
+    <div class="sep light seq-line" id="s3-sep" style="margin: 2.5rem auto;"></div>
+    <div class="single-line dark-text seq-line" id="s3-sub" style="font-size: clamp(13px,1.8vw,20px); font-style:italic; opacity:0.55; text-align:center;">
+      And you are outsourcing them.
+    </div>
+    <div class="proceed-hint dark-subtext" id="s3-proceed" onclick="nextScene()" style="opacity:0; color: rgba(244,240,232,0.3); letter-spacing:0.22em;">continue</div>
+  </div>
+
+  <!-- Scene 4: Breath / Timer (dark) -->
+  <div class="scene" id="scene-breath" style="text-align:center;">
+    <div class="single-line dark-text seq-line" id="sb-h" style="text-align:center; font-size:clamp(15px,2.2vw,26px); opacity:0.7;">
+      You could stop.
+    </div>
+    <div class="sep light seq-line" id="sb-sep" style="margin: 2rem auto;"></div>
+    <div id="countdown-ring" class="seq-line" id="sb-ring">
+      <svg viewBox="0 0 90 90">
+        <circle class="track" cx="45" cy="45" r="40"/>
+        <circle class="progress" id="ring-progress" cx="45" cy="45" r="40"/>
+      </svg>
+      <div id="countdown-number">10</div>
+    </div>
+    <div class="breath-instruction seq-line" id="sb-inst">Sit with what remains.</div>
+  </div>
+
+  <!-- Scene 5: After breath -->
+  <div class="scene" id="scene-5" style="text-align:center;">
+    <div class="single-line dark-text seq-line" id="s5-h" style="text-align:center; font-size: clamp(14px,2vw,22px); line-height:1.8; opacity:0.65;">
+      That.<br>
+      <em style="opacity:0.9; font-size: 1.2em; color: rgba(244,240,232,0.85);">That</em> was it.
+    </div>
+    <div class="sep light seq-line" id="s5-sep" style="margin: 2.5rem auto;"></div>
+    <div class="cta-area seq-line" id="s5-cta">
+      <div class="quiet" style="color: rgba(244,240,232,0.35); text-align:center; margin-bottom:2rem;">
+        <span style="display:block; opacity:1;">If this unsettled you.</span>
+        <span style="display:block; opacity:1;">If something clarified.</span>
+        <span style="display:block; opacity:1;">If you're curious what just happened.</span>
+      </div>
+      <a href="https://ufmastery.com" class="cta-link shown" id="s5-link" style="display:block; text-align:center; color: rgba(244,240,232,0.45); border-bottom: none; letter-spacing:0.22em; margin-top:2.5rem;">
+        ufmastery.com
+      </a>
+      <div style="margin-top: 4rem; text-align:center;">
+        <span onclick="restartExperience()" style="font-family:'Lato',sans-serif; font-weight:300; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:rgba(244,240,232,0.2); cursor:pointer; transition: color 0.4s ease;" onmouseover="this.style.color='rgba(244,240,232,0.45)'" onmouseout="this.style.color='rgba(244,240,232,0.2)'">begin again</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Progress indicator -->
+<div id="progress">
+  <div class="dot active" id="dot-0"></div>
+  <div class="dot" id="dot-1"></div>
+  <div class="dot" id="dot-2"></div>
+  <div class="dot" id="dot-3"></div>
+  <div class="dot" id="dot-4"></div>
+  <div class="dot" id="dot-5"></div>
+</div>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  // Scene management
+  const scenes = ['scene-0','scene-1','scene-2','scene-3','scene-breath','scene-5'];
+  const dots = document.querySelectorAll('.dot');
+  let currentScene = 0;
+  let transitioning = false;
+  let timerRunning = false;
+
+  const stage = document.getElementById('stage');
+  const darkScenes = new Set([3, 4, 5]);
+
+  function showScene(index) {
+    if (index < 0 || index >= scenes.length) return;
+
+    const prevEl = document.getElementById(scenes[currentScene]);
+    const nextEl = document.getElementById(scenes[index]);
+
+    prevEl.classList.remove('active');
+
+    // Dark/light transition
+    if (darkScenes.has(index)) {
+      stage.classList.add('dark');
+      dots.forEach(d => d.classList.add('dark-mode'));
+    } else {
+      stage.classList.remove('dark');
+      dots.forEach(d => d.classList.remove('dark-mode'));
+    }
+
+    currentScene = index;
+
+    setTimeout(() => {
+      nextEl.classList.add('active');
+      updateDots();
+      animateScene(index);
+    }, 120);
+  }
+
+  function updateDots() {
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === currentScene);
+    });
+    document.getElementById('progress').classList.add('visible');
+  }
+
+  // Scene animations
+  function animateScene(index) {
+    const el = document.getElementById(scenes[index]);
+    const seqLines = el.querySelectorAll('.seq-line');
+
+    seqLines.forEach((line, i) => {
+      line.classList.remove('in');
+      setTimeout(() => {
+        line.classList.add('in');
+        // Show proceed hint after last line
+        if (i === seqLines.length - 1) {
+          const hint = el.querySelector('.proceed-hint');
+          if (hint) {
+            setTimeout(() => {
+              hint.style.opacity = '0.45';
+              hint.style.transition = 'opacity 1.2s ease';
+            }, 600);
+          }
+          // Special: scene 3 proceed btn
+          if (index === 3) {
+            setTimeout(() => {
+              const p = document.getElementById('s3-proceed');
+              p.style.opacity = '0.35';
+              p.style.transition = 'opacity 1.2s ease';
+            }, 1200);
+          }
+          // Special: start timer after breath scene appears
+          if (index === 4) {
+            setTimeout(startTimer, 1000);
+          }
+        }
+      }, 350 + i * 380);
+    });
+  }
+
+  // Timer
+  function startTimer() {
+    if (timerRunning) return;
+    timerRunning = true;
+    const ring = document.getElementById('ring-progress');
+    const num = document.getElementById('countdown-number');
+    const circumference = 251.2;
+    let remaining = 10;
+
+    ring.style.strokeDashoffset = '0';
+    num.textContent = remaining;
+
+    const interval = setInterval(() => {
+      remaining--;
+      num.textContent = remaining;
+      const offset = circumference * (1 - remaining / 10);
+      ring.style.strokeDashoffset = offset;
+
+      if (remaining <= 0) {
+        clearInterval(interval);
+        num.textContent = '';
+        ring.style.opacity = '0';
+        ring.style.transition = 'opacity 0.8s ease';
+        timerRunning = false;
+        setTimeout(() => nextScene(), 1200);
+      }
+    }, 1000);
+  }
+
+  function nextScene() {
+    if (transitioning) return;
+    if (currentScene === 4 && timerRunning) return; // Let timer run
+    transitioning = true;
+    setTimeout(() => {
+      transitioning = false;
+    }, 1400);
+    showScene(currentScene + 1);
+  }
+
+  // Keyboard support
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      if (currentScene !== 4) nextScene();
+    }
+  });
+
+  // Restart
+  function restartExperience() {
+    const prevEl = document.getElementById(scenes[currentScene]);
+    prevEl.classList.remove('active');
+    stage.classList.remove('dark');
+    dots.forEach(d => d.classList.remove('dark-mode'));
+    timerRunning = false;
+    currentScene = 0;
+
+    // Reset ring
+    const ring = document.getElementById('ring-progress');
+    const num = document.getElementById('countdown-number');
+    ring.style.opacity = '1';
+    ring.style.strokeDashoffset = '0';
+    num.textContent = '10';
+
+    // Reset all seq-lines
+    document.querySelectorAll('.seq-line').forEach(l => l.classList.remove('in'));
+    document.querySelectorAll('.proceed-hint').forEach(h => { h.style.opacity = '0'; });
+
+    setTimeout(() => {
+      const next = document.getElementById(scenes[0]);
+      next.classList.add('active');
+      updateDots();
+      animateScene(0);
+    }, 300);
+  }
+
+  // Init: animate first scene
+  setTimeout(() => {
+    animateScene(0);
+    updateDots();
+  }, 400);
+</script>
+</body>
+</html>
