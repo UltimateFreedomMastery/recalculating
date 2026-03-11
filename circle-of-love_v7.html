@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>document.documentElement.className += ' js-enabled';</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Circle of Love</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #c9a55a;
+    --gold-dim: rgba(201, 165, 90, 0.4);
+    --gold-glow: rgba(201, 165, 90, 0.15);
+    --gold-faint: rgba(201, 165, 90, 0.07);
+    --bg: #0a0a0a;
+    --bg-subtle: #111111;
+    --text: #d4d0c8;
+    --text-dim: #9f9a90;
+    --text-faint: #857e74;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dim) var(--bg);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.85;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (min-width: 900px) {
+    .js-enabled body { cursor: none; }
+  }
+
+  /* ═══════════════════════════════
+     CUSTOM CURSOR
+  ═══════════════════════════════ */
+  .cursor {
+    position: fixed; width: 7px; height: 7px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    position: fixed; width: 34px; height: 34px;
+    border: 1px solid rgba(201,169,110,0.35); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.22s, height 0.22s, border-color 0.22s;
+  }
+
+  @media (hover: none) and (pointer: coarse), (max-width: 899px) {
+    .cursor, .cursor-ring { display: none !important; }
+    body { cursor: auto; }
+  }
+
+  /* ═══════════════════════════════
+     SCROLL PROGRESS
+  ═══════════════════════════════ */
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    z-index: 1000;
+    transition: width 0.15s ease-out;
+  }
+
+  /* ═══════════════════════════════
+     FIXED CIRCLE VISUAL
+  ═══════════════════════════════ */
+  .circle-anchor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .circle-anchor .ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 1px solid var(--gold-dim);
+    transform: translate(-50%, -50%);
+    transition: width 1.8s cubic-bezier(0.23, 1, 0.32, 1),
+                height 1.8s cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 1.8s ease,
+                border-color 1.8s ease;
+  }
+
+  .circle-anchor .ring-inner {
+    width: 80px; height: 80px;
+    opacity: 0; border-color: var(--gold);
+  }
+  .circle-anchor .ring-mid {
+    width: 200px; height: 200px;
+    opacity: 0; border-style: dashed;
+  }
+  .circle-anchor .ring-outer {
+    width: 400px; height: 400px;
+    opacity: 0;
+  }
+  .circle-anchor .ring-vast {
+    width: 90vmax; height: 90vmax;
+    opacity: 0; border-color: var(--gold-glow);
+  }
+  .circle-anchor .ring-pulse {
+    position: absolute; top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    background: var(--gold); border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    box-shadow: 0 0 20px var(--gold-dim), 0 0 60px var(--gold-faint);
+  }
+
+  /* ═══════════════════════════════
+     PHASE STATES
+  ═══════════════════════════════ */
+  body[data-phase="origin"] .ring-pulse { opacity: 1; }
+  body[data-phase="origin"] .ring-inner { opacity: 0.5; width: 60px; height: 60px; }
+
+  body[data-phase="self"] .ring-pulse { opacity: 0.8; }
+  body[data-phase="self"] .ring-inner { opacity: 0.6; width: 100px; height: 100px; }
+
+  body[data-phase="conflict"] .ring-pulse { opacity: 0.6; }
+  body[data-phase="conflict"] .ring-inner { opacity: 0.5; width: 120px; height: 120px; }
+  body[data-phase="conflict"] .ring-mid { opacity: 0.25; width: 260px; height: 260px; }
+
+  body[data-phase="expansion"] .ring-pulse { opacity: 0.4; }
+  body[data-phase="expansion"] .ring-inner { opacity: 0.4; width: 160px; height: 160px; }
+  body[data-phase="expansion"] .ring-mid { opacity: 0.3; width: 360px; height: 360px; }
+  body[data-phase="expansion"] .ring-outer { opacity: 0.15; width: 600px; height: 600px; }
+
+  body[data-phase="oneness"] .ring-pulse { opacity: 0.3; width: 10px; height: 10px; }
+  body[data-phase="oneness"] .ring-inner { opacity: 0.25; width: 250px; height: 250px; }
+  body[data-phase="oneness"] .ring-mid { opacity: 0.2; width: 500px; height: 500px; }
+  body[data-phase="oneness"] .ring-outer { opacity: 0.12; width: 800px; height: 800px; }
+  body[data-phase="oneness"] .ring-vast { opacity: 0.06; }
+
+  body[data-phase="resolve"] .ring-pulse { opacity: 0.2; width: 14px; height: 14px; box-shadow: 0 0 40px var(--gold-dim), 0 0 120px var(--gold-faint); }
+  body[data-phase="resolve"] .ring-inner { opacity: 0.15; width: 300px; height: 300px; }
+  body[data-phase="resolve"] .ring-mid { opacity: 0.12; width: 600px; height: 600px; }
+  body[data-phase="resolve"] .ring-outer { opacity: 0.08; width: 100vmax; height: 100vmax; }
+  body[data-phase="resolve"] .ring-vast { opacity: 0.04; width: 160vmax; height: 160vmax; }
+
+  /* Finale pulse — circle briefly expands then fades */
+  body[data-phase="finale"] .ring-pulse {
+    opacity: 0; width: 20px; height: 20px;
+    box-shadow: 0 0 60px var(--gold-dim), 0 0 160px var(--gold-faint);
+    transition: all 3s ease;
+  }
+  body[data-phase="finale"] .ring-inner {
+    opacity: 0.08; width: 400px; height: 400px;
+    transition: all 3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  body[data-phase="finale"] .ring-mid {
+    opacity: 0.06; width: 800px; height: 800px;
+    transition: all 3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  body[data-phase="finale"] .ring-outer {
+    opacity: 0.04; width: 140vmax; height: 140vmax;
+    transition: all 3.5s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  body[data-phase="finale"] .ring-vast {
+    opacity: 0.02; width: 200vmax; height: 200vmax;
+    transition: all 4s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* ═══════════════════════════════
+     CONTENT LAYER
+  ═══════════════════════════════ */
+  .content { position: relative; z-index: 5; isolation: isolate; }
+
+  /* ═══════════════════════════════
+     HERO
+  ═══════════════════════════════ */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 2rem;
+    position: relative;
+  }
+  .hero-overline {
+    font-size: 0.7rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--gold-dim);
+    margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 1.5s ease 0.5s forwards;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(2.6rem, 7vw, 5.5rem);
+    color: var(--gold); letter-spacing: 0.04em;
+    line-height: 1.15; margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 2s ease 0.8s forwards;
+  }
+  .hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    font-weight: 300; font-style: italic;
+    color: var(--text-dim); max-width: 560px; line-height: 1.7;
+    opacity: 0; animation: fadeUp 2s ease 1.3s forwards;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 3rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0.6rem;
+    opacity: 0; animation: fadeUp 1.5s ease 2.2s forwards;
+  }
+  .hero-scroll span {
+    font-size: 0.6rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--text-faint);
+  }
+  .hero-scroll .scroll-line {
+    width: 1px; height: 36px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    animation: scrollPulse 2.5s ease-in-out infinite;
+  }
+
+  /* ═══════════════════════════════
+     SECTIONS & BLOCKS
+  ═══════════════════════════════ */
+  .essay-section {
+    max-width: 720px; margin: 0 auto; padding: 6rem 2rem;
+  }
+  .section-break { height: 20vh; min-height: 100px; }
+  .section-break-large { height: 35vh; min-height: 160px; }
+
+  .block {
+    margin-bottom: 2.2rem;
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .block.visible { opacity: 1; transform: translateY(0); }
+  .block p { margin-bottom: 0; }
+
+  /* ═══════════════════════════════
+     EMPHASIS
+  ═══════════════════════════════ */
+  .emphasis { font-style: italic; color: var(--gold); font-size: 1.1em; }
+  .emphasis-dim { font-style: italic; color: var(--text-dim); }
+
+  /* Load-bearing sentence — three-line treatment */
+  .keystone {
+    text-align: center;
+    padding: 2.5rem 0;
+    margin: 4rem 0 2.5rem;
+  }
+  .keystone p {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    color: var(--gold);
+    line-height: 2.2;
+    letter-spacing: 0.02em;
+  }
+
+  /* ═══════════════════════════════
+     PULL QUOTES
+  ═══════════════════════════════ */
+  .pull-quote {
+    max-width: 620px; margin: 5rem auto; padding: 3rem 0;
+    text-align: center;
+    border-top: 1px solid var(--gold-faint);
+    border-bottom: 1px solid var(--gold-faint);
+  }
+  .pull-quote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+    color: var(--gold); line-height: 1.6; letter-spacing: 0.01em;
+  }
+
+  /* ═══════════════════════════════
+     TRIADS
+  ═══════════════════════════════ */
+  .triad {
+    margin: 3rem 0; padding-left: 1.8rem;
+    border-left: 1px solid var(--gold-faint);
+  }
+  .triad p { margin-bottom: 0.8rem; color: var(--text-dim); font-size: 1.05em; }
+  .triad p:last-child { margin-bottom: 0; }
+
+  /* ═══════════════════════════════
+     THOUGHT EXPERIMENT
+  ═══════════════════════════════ */
+  .thought-experiment {
+    background: var(--bg-subtle);
+    border: 1px solid rgba(201, 165, 90, 0.08);
+    border-radius: 2px; padding: 3rem 2.5rem;
+    margin: 3.5rem 0; position: relative;
+  }
+  .thought-experiment::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+  .thought-experiment .te-label {
+    font-size: 0.65rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1.8rem;
+  }
+
+  /* ═══════════════════════════════
+     SECTION HEADINGS
+  ═══════════════════════════════ */
+  .section-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: var(--gold); text-align: center;
+    letter-spacing: 0.05em; margin-bottom: 3.5rem;
+  }
+  .section-heading::after {
+    content: ''; display: block; width: 40px; height: 1px;
+    background: var(--gold-dim); margin: 1.5rem auto 0;
+  }
+
+  /* ═══════════════════════════════
+     DIVIDER
+  ═══════════════════════════════ */
+  .divider {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1.2rem; margin: 4rem auto; max-width: 200px;
+  }
+  .divider span {
+    width: 4px; height: 4px; background: var(--gold-dim); border-radius: 50%;
+  }
+  .divider .divider-line { flex: 1; height: 1px; background: var(--gold-faint); }
+
+  /* ═══════════════════════════════
+     IDENTITY LENS (DIAGNOSTIC TOOL)
+  ═══════════════════════════════ */
+  .identity-lens {
+    max-width: 560px; margin: 4rem auto;
+    padding: 3rem 2.5rem;
+    background: var(--bg-subtle);
+    border: 1px solid rgba(201, 165, 90, 0.1);
+    border-radius: 2px; position: relative;
+  }
+  .identity-lens::before {
+    content: ''; position: absolute; top: 0; left: 2.5rem; right: 2.5rem; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+  .identity-lens .il-label {
+    font-size: 0.65rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 2rem; text-align: center;
+  }
+  .identity-lens .il-intro {
+    font-style: italic; color: var(--text-dim);
+    margin-bottom: 2rem; text-align: center; font-size: 1.05em;
+  }
+  .identity-lens .il-questions {
+    list-style: none; counter-reset: il-counter;
+  }
+  .identity-lens .il-questions li {
+    counter-increment: il-counter;
+    padding: 0.7rem 0; padding-left: 2.2rem;
+    position: relative; color: var(--text); font-size: 1.05em;
+    border-bottom: 1px solid rgba(201, 165, 90, 0.05);
+  }
+  .identity-lens .il-questions li:last-child { border-bottom: none; }
+  .identity-lens .il-questions li::before {
+    content: counter(il-counter);
+    position: absolute; left: 0; top: 0.7rem;
+    font-size: 0.85em; color: var(--gold-dim); font-weight: 400;
+  }
+  .identity-lens .il-note {
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid rgba(201, 165, 90, 0.06);
+    font-style: italic; color: var(--text-dim);
+    font-size: 0.95em; text-align: center;
+  }
+
+  /* ═══════════════════════════════
+     STATIC DIAGRAM
+  ═══════════════════════════════ */
+  .diagram-container {
+    max-width: 600px; margin: 5rem auto;
+    text-align: center; padding: 0 2rem;
+  }
+  .diagram-visual {
+    position: relative; width: 340px; height: 340px;
+    margin: 0 auto 3rem;
+  }
+  .diagram-ring {
+    position: absolute; border-radius: 50%; border: 1px solid;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    display: flex; align-items: flex-start; justify-content: center;
+  }
+  .diagram-ring-1 { width: 340px; height: 340px; border-color: rgba(201, 165, 90, 0.12); }
+  .diagram-ring-2 { width: 270px; height: 270px; border-color: rgba(201, 165, 90, 0.18); }
+  .diagram-ring-3 { width: 200px; height: 200px; border-color: rgba(201, 165, 90, 0.25); }
+  .diagram-ring-4 { width: 130px; height: 130px; border-color: rgba(201, 165, 90, 0.35); }
+  .diagram-ring-5 { width: 60px; height: 60px; border-color: var(--gold); }
+  .diagram-label {
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--text-faint);
+    padding-top: 8px; white-space: nowrap;
+  }
+  .diagram-ring-5 .diagram-label { color: var(--gold-dim); padding-top: 18px; }
+  .diagram-center-dot {
+    position: absolute; top: 50%; left: 50%;
+    width: 4px; height: 4px; background: var(--gold);
+    border-radius: 50%; transform: translate(-50%, -50%);
+    box-shadow: 0 0 12px var(--gold-dim);
+  }
+  .diagram-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400; font-size: 1.1rem;
+    color: var(--gold); letter-spacing: 0.08em; margin-bottom: 1rem;
+  }
+  .diagram-caption {
+    font-style: italic; color: var(--text-dim);
+    font-size: 0.95em; line-height: 1.7; max-width: 480px; margin: 0 auto;
+  }
+  .diagram-caption-secondary {
+    font-size: 0.85em; color: var(--text-faint);
+    margin-top: 0.8rem; font-style: normal;
+  }
+
+  /* ═══════════════════════════════
+     THREE CIRCLES DIAGRAM
+  ═══════════════════════════════ */
+  .three-circles {
+    max-width: 720px;
+    margin: 5rem auto;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  .three-circles-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400; font-size: 1.1rem;
+    color: var(--gold); letter-spacing: 0.08em;
+    margin-bottom: 2.5rem;
+  }
+  .three-circles-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+  .three-circles-col {
+    flex: 1;
+    max-width: 200px;
+    text-align: center;
+  }
+  .tc-ring {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 1px solid;
+    margin: 0 auto 1.2rem;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tc-ring-small {
+    width: 60px; height: 60px;
+    border-color: var(--gold);
+  }
+  .tc-ring-medium {
+    width: 80px; height: 80px;
+    border-color: var(--gold-dim);
+  }
+  .tc-ring-boundless {
+    width: 100px; height: 100px;
+    border-color: rgba(201, 165, 90, 0.15);
+    border-style: dashed;
+  }
+  .tc-ring::after {
+    content: '';
+    width: 4px; height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--gold-faint);
+  }
+  .tc-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400; font-size: 1rem;
+    color: var(--gold); margin-bottom: 0.3rem;
+  }
+  .tc-scope {
+    font-size: 0.65rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--text-faint);
+    margin-bottom: 0.8rem;
+  }
+  .tc-result {
+    font-style: italic; font-size: 0.9em;
+    color: var(--text-dim); line-height: 1.6;
+  }
+  .three-circles-footer {
+    margin-top: 2.5rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--gold-faint);
+    font-style: italic; color: var(--text-dim);
+    font-size: 0.9em;
+  }
+  @media (max-width: 600px) {
+    .three-circles-grid {
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+    .three-circles-col { max-width: 240px; }
+  }
+
+  /* ═══════════════════════════════
+     FINALE
+  ═══════════════════════════════ */
+  .finale {
+    min-height: 80vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 4rem 2rem;
+  }
+  .finale p {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    color: var(--text); line-height: 1.7;
+    max-width: 600px; margin-bottom: 1.5rem;
+  }
+  .finale .final-line {
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    color: var(--gold); font-weight: 400; margin-top: 1rem;
+  }
+
+  /* ═══════════════════════════════
+     COLOPHON
+  ═══════════════════════════════ */
+  .colophon {
+    text-align: center; padding: 4rem 2rem 3rem;
+    border-top: 1px solid var(--gold-faint);
+    max-width: 500px; margin: 0 auto;
+  }
+  .colophon p {
+    font-size: 0.7rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--text-faint);
+  }
+
+  /* ═══════════════════════════════
+     ANIMATIONS
+  ═══════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  /* ═══════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════ */
+  @media (max-width: 600px) {
+    body { font-size: 18px; }
+    .essay-section { padding: 4rem 1.5rem; }
+    .thought-experiment { padding: 2rem 1.5rem; }
+    .identity-lens { padding: 2rem 1.5rem; }
+    .pull-quote { margin: 3rem auto; padding: 2rem 0; }
+    .triad { padding-left: 1.2rem; }
+    .diagram-visual { width: 280px; height: 280px; }
+    .diagram-ring-1 { width: 280px; height: 280px; }
+    .diagram-ring-2 { width: 224px; height: 224px; }
+    .diagram-ring-3 { width: 168px; height: 168px; }
+    .diagram-ring-4 { width: 112px; height: 112px; }
+    .diagram-ring-5 { width: 56px; height: 56px; }
+  }
+</style>
+</head>
+<body data-phase="dormant">
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="circle-anchor" aria-hidden="true">
+  <div class="ring ring-vast"></div>
+  <div class="ring ring-outer"></div>
+  <div class="ring ring-mid"></div>
+  <div class="ring ring-inner"></div>
+  <div class="ring-pulse"></div>
+</div>
+
+<div class="content">
+
+  <!-- ═════════════════════════════════════
+       HERO
+  ═════════════════════════════════════ -->
+  <section class="hero">
+    <p class="hero-overline">The Hidden Structure Behind Human Conflict and Moral Progress</p>
+    <h1>The Circle of Love</h1>
+    <p class="hero-subtitle">Everything humans do is done for love. The only question is how small the circle of love is.</p>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+
+  <!-- ═════════════════════════════════════
+       I. THE PARADOX
+  ═════════════════════════════════════ -->
+  <div class="section-break"></div>
+
+  <section class="essay-section" data-phase="origin">
+
+    <div class="block">
+      <p>Love is often described as the opposite of harm.</p>
+    </div>
+
+    <div class="block">
+      <p>We imagine that a world with more love would naturally contain less conflict, less cruelty, and less suffering. Love, in this view, is the antidote to violence.</p>
+    </div>
+
+    <div class="block">
+      <p>Yet history tells a more complicated story.</p>
+    </div>
+
+    <div class="block">
+      <p>Many of the most destructive actions in history were carried out in the name of something deeply loved: a family, a tribe, a nation, a belief, a way of life. People rarely see themselves as villains. More often, they believe they are protecting something that matters.</p>
+    </div>
+
+    <div class="block">
+      <p>This raises an uncomfortable possibility.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">Perhaps the problem is not that humanity lacks love.</span></p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">Perhaps the problem is that love is often confined within boundaries too small to include those it harms.</span></p>
+    </div>
+
+  </section>
+
+  <!-- THESIS -->
+  <div class="pull-quote block">
+    <p>Everything humans do is done for love. The only question is how small the circle of love is.</p>
+  </div>
+
+  <!-- ═════════════════════════════════════
+       COMPRESSION PARAGRAPH
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="block">
+      <p>Every person carries an invisible boundary around what they consider part of themselves. Inside that boundary lie the people, groups, and identities they instinctively care for, defend, and protect. Outside it lie those they may ignore, oppose, or even harm.</p>
+    </div>
+
+    <div class="block">
+      <p>This boundary forms what we might call <span class="emphasis">the Circle of Love.</span></p>
+    </div>
+
+    <div class="block">
+      <p>The larger the circle, the more beings our love includes. The smaller the circle, the easier harm becomes to justify. Much of human conflict can be understood as the collision of circles drawn in different places. Moral progress, in turn, is often the story of those circles slowly expanding.</p>
+    </div>
+
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span></span><div class="divider-line"></div></div>
+
+  <!-- ═════════════════════════════════════
+       II. THE UNCOMFORTABLE TRUTH
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="block">
+      <p>To say that harmful actions can be motivated by love sounds unsettling at first. It can seem as though such a claim excuses cruelty or diminishes the suffering it causes.</p>
+    </div>
+
+    <div class="block">
+      <p>But understanding the forces that drive human behavior is not the same as justifying them.</p>
+    </div>
+
+    <div class="block">
+      <p>People rarely believe they are acting out of malice. More often, they believe they are defending something that matters: their children, their community, their identity, their beliefs. The instinct to protect what we love is one of the deepest forces in human life.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis-dim">The tragedy is not that love is absent.</span></p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis-dim">The tragedy is that love is often confined within boundaries that exclude those who suffer from its protection.</span></p>
+    </div>
+
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span></span><div class="divider-line"></div></div>
+
+  <!-- ═════════════════════════════════════
+       III. THE PATTERN
+  ═════════════════════════════════════ -->
+  <section class="essay-section" data-phase="self">
+
+    <div class="section-heading block">The Pattern</div>
+
+    <div class="block">
+      <p>If we look closely, a pattern begins to appear.</p>
+    </div>
+
+    <div class="block">
+      <p>Love itself is rarely the variable.</p>
+    </div>
+
+    <div class="block">
+      <p>In moments of compassion, love is present. In moments of cruelty, love is often present as well&thinsp;—&thinsp;directed toward something else.</p>
+    </div>
+
+    <div class="triad block">
+      <p>A soldier fights for the love of country.</p>
+      <p>A parent lashes out for the love of a child.</p>
+      <p>A movement defends its beliefs for the love of its identity.</p>
+    </div>
+
+    <div class="block">
+      <p>In each case, love is real. What changes is where it is directed.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">The difference between compassion and cruelty is often not the presence of love, but the boundary that determines who receives it.</span></p>
+    </div>
+
+  </section>
+
+  <div class="section-break"></div>
+
+  <!-- ═════════════════════════════════════
+       IV. THE BOUNDARY
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="section-heading block">The Boundary</div>
+
+    <div class="block">
+      <p><span class="emphasis">Imagine drawing a circle around everything you consider part of yourself.</span></p>
+    </div>
+
+    <div class="block">
+      <p>Inside that circle lie the people and identities you instinctively care about&thinsp;—&thinsp;your family, your friends, your community, perhaps your country or beliefs. When something inside that circle is threatened, you feel it personally. Loyalty and protection arise almost automatically.</p>
+    </div>
+
+    <div class="block">
+      <p>Outside the circle, the emotional connection weakens. Those beyond the boundary may still matter, but they no longer feel like part of <em>us</em>.</p>
+    </div>
+
+    <div class="block">
+      <p>Every human being carries a circle like this, whether consciously or not.</p>
+    </div>
+
+    <div class="block">
+      <p>And that circle is shaped by something deeper: <span class="emphasis">identity.</span></p>
+    </div>
+
+    <div class="block">
+      <p>Each of us carries a sense of who we are and what belongs to us. That identity may include family, culture, belief, nation, or role.</p>
+    </div>
+
+    <div class="triad block">
+      <p>Where identity expands, the circle expands with it.</p>
+      <p>Where identity narrows, the circle contracts.</p>
+    </div>
+
+    <div class="keystone block">
+      <p>The boundaries of identity<br>determine<br>the boundaries of love.</p>
+    </div>
+
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span></span><div class="divider-line"></div></div>
+
+  <!-- ═════════════════════════════════════
+       V. LOVE IN DISGUISE
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="section-heading block">Love in Disguise</div>
+
+    <div class="block">
+      <p>This does not mean people never act from anger, fear, or hatred. Human behavior is complex, and powerful emotions often shape our actions.</p>
+    </div>
+
+    <div class="block">
+      <p>But many of those emotions arise when something we love feels threatened.</p>
+    </div>
+
+    <div class="triad block">
+      <p>A parent's anger when their child is harmed comes from love.</p>
+      <p>A citizen's defensiveness when their country is criticized often comes from love.</p>
+      <p>A believer's outrage when their faith is challenged can arise from love for what they hold sacred.</p>
+    </div>
+
+    <div class="block">
+      <p>These reactions do not feel like love in the moment, but they often arise from the instinct to protect what lies inside the circle of identity.</p>
+    </div>
+
+    <div class="block">
+      <p>Once you begin to see identity shaping the circle of love, a useful question emerges whenever conflict appears.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">What lies inside each person's circle of identity&thinsp;—&thinsp;and what lies outside it?</span></p>
+    </div>
+
+    <div class="block">
+      <p>The answer often explains more than the surface argument itself.</p>
+    </div>
+
+  </section>
+
+  <div class="section-break-large"></div>
+
+  <!-- ═════════════════════════════════════
+       VI. THE THOUGHT EXPERIMENT
+  ═════════════════════════════════════ -->
+  <section class="essay-section" data-phase="conflict">
+
+    <div class="section-heading block">The Circle in Motion</div>
+
+    <div class="thought-experiment block">
+      <div class="te-label">Thought Experiment</div>
+
+      <div class="block">
+        <p>Imagine someone walking up to you and saying something deliberately insulting&thinsp;—&thinsp;something meant to diminish you or question your worth.</p>
+      </div>
+
+      <div class="block">
+        <p>Most people would feel an immediate reaction. The body tightens. Defensiveness rises. The impulse to respond appears almost instantly.</p>
+      </div>
+
+      <div class="block">
+        <p>Now imagine hearing the exact same insult directed at a stranger on the other side of the world.</p>
+      </div>
+
+      <div class="block">
+        <p>The words are identical, yet the emotional response is likely very different.</p>
+      </div>
+
+      <div class="block">
+        <p><span class="emphasis">The action has not changed. Only the circle has.</span></p>
+      </div>
+
+      <div class="block">
+        <p>Now imagine the insult directed not at you or a stranger, but at someone you care about deeply&thinsp;—&thinsp;a partner, a close friend, a child.</p>
+      </div>
+
+      <div class="block">
+        <p>For many people, the reaction becomes <em>stronger</em> than when the insult was directed at them personally.</p>
+      </div>
+
+      <div class="block">
+        <p>Why?</p>
+      </div>
+
+      <div class="block">
+        <p>Because the person being attacked lives inside your circle of identity. When someone we love is threatened, something inside us reacts as though <em>we ourselves</em> have been threatened.</p>
+      </div>
+
+      <div class="block">
+        <p><span class="emphasis-dim">Love did not suddenly appear or disappear.</span></p>
+      </div>
+
+      <div class="block">
+        <p><span class="emphasis-dim">The circle simply moved.</span></p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═════════════════════════════════════
+       IDENTITY LENS: DIAGNOSTIC TOOL
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="identity-lens block">
+      <div class="il-label">The Identity Lens</div>
+      <p class="il-intro">When conflict appears, ask three questions:</p>
+      <ol class="il-questions">
+        <li>What identity is being protected?</li>
+        <li>Who lies inside that circle of identity?</li>
+        <li>Who lies outside it?</li>
+      </ol>
+      <p class="il-note">Often the disagreement is not really about the issue being debated. It is about protecting different circles of identity.</p>
+    </div>
+
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span></span><div class="divider-line"></div></div>
+
+  <!-- ═════════════════════════════════════
+       VII. CIRCLES IN COLLISION
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="section-heading block">Circles in Collision</div>
+
+    <div class="block">
+      <p>Seen through this lens, many everyday conflicts begin to look different.</p>
+    </div>
+
+    <div class="block">
+      <p>Arguments between individuals often appear to be about facts, opinions, or behavior. Yet beneath the surface, something more personal is frequently at stake.</p>
+    </div>
+
+    <div class="block">
+      <p>When people react strongly, it is often because something within their circle of identity feels threatened&thinsp;—&thinsp;their sense of competence, their values, their relationships, or the roles they believe they occupy in the world.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">What looks like disagreement is often the instinct to defend a piece of identity.</span></p>
+    </div>
+
+    <div class="block">
+      <p>Two people may believe they are debating an issue, while in reality they are protecting different parts of themselves.</p>
+    </div>
+
+  </section>
+
+  <div class="section-break"></div>
+
+  <!-- ═════════════════════════════════════
+       VIII. GROUPS
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="block">
+      <p>The same pattern appears at the level of groups.</p>
+    </div>
+
+    <div class="block">
+      <p>Human beings rarely exist as isolated individuals. We belong to communities, cultures, religions, political movements, and nations. These shared identities expand the circle of who we experience as us.</p>
+    </div>
+
+    <div class="block">
+      <p>Within that circle, loyalty and compassion tend to flourish. Outside the circle, the emotional connection weakens.</p>
+    </div>
+
+    <div class="block">
+      <p>When circles of identity are drawn in different places, tension becomes almost inevitable. Each side believes it is protecting something meaningful&thinsp;—&thinsp;its values, its traditions, its sense of belonging.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">When circles collide, each side believes it is defending what matters most.</span></p>
+    </div>
+
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span></span><div class="divider-line"></div></div>
+
+  <!-- ═════════════════════════════════════
+       IX. THE EXPANDING CIRCLE
+  ═════════════════════════════════════ -->
+  <section class="essay-section" data-phase="expansion">
+
+    <div class="section-heading block">The Expanding Circle</div>
+
+    <div class="block">
+      <p>Viewed across centuries, this same pattern appears in the evolution of human societies.</p>
+    </div>
+
+    <div class="block">
+      <p>Practices that were once widely accepted gradually came to be seen as unacceptable. Groups once excluded from moral consideration were slowly brought inside the circle.</p>
+    </div>
+
+    <div class="block">
+      <p>Ancient societies extended protection mainly to members of their tribe. Later empires widened it to citizens. But those beyond the boundary remained outside moral concern.</p>
+    </div>
+
+    <div class="triad block">
+      <p>The abolition of slavery reflected a widening recognition that those once treated as property belonged within the moral community.</p>
+      <p>Movements for civil rights widened the circle further, insisting that dignity and protection should not depend on race or background.</p>
+      <p>More recently, concern for animals and the natural world has begun to extend moral consideration beyond humanity itself.</p>
+    </div>
+
+    <div class="block">
+      <p>Societies do not become more compassionate by discovering love for the first time.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">They become more compassionate when the circle of identity widens.</span></p>
+    </div>
+
+  </section>
+
+  <section class="essay-section" style="padding-bottom: 0;">
+    <div class="block">
+      <p><span class="emphasis-dim">The structure becomes easier to see when visualized.</span></p>
+    </div>
+  </section>
+
+  <!-- ═════════════════════════════════════
+       STATIC DIAGRAM: THE SHAREABLE VISUAL
+  ═════════════════════════════════════ -->
+  <div class="diagram-container block">
+    <div class="diagram-visual">
+      <div class="diagram-ring diagram-ring-1"><span class="diagram-label">Oneness</span></div>
+      <div class="diagram-ring diagram-ring-2"><span class="diagram-label">Humanity</span></div>
+      <div class="diagram-ring diagram-ring-3"><span class="diagram-label">Nation · Culture</span></div>
+      <div class="diagram-ring diagram-ring-4"><span class="diagram-label">Family · Tribe</span></div>
+      <div class="diagram-ring diagram-ring-5"><span class="diagram-label">Self</span></div>
+      <div class="diagram-center-dot"></div>
+    </div>
+    <p class="diagram-title">The Circle of Love</p>
+    <p class="diagram-caption">The boundaries of identity determine the boundaries of love.</p>
+    <p class="diagram-caption diagram-caption-secondary">Human conflict often arises when circles of identity are drawn in different places.</p>
+  </div>
+
+  <div class="section-break-large"></div>
+
+  <!-- ═════════════════════════════════════
+       X. A DIFFERENT UNDERSTANDING
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="section-heading block">A Different Understanding of Love</div>
+
+    <div class="block">
+      <p>When people speak about love, they often describe it as something we must <em>give</em> to others.</p>
+    </div>
+
+    <div class="block">
+      <p>This way of thinking makes love feel like a limited resource&thinsp;—&thinsp;something that can be exhausted or withheld.</p>
+    </div>
+
+    <div class="block">
+      <p>But the Circle of Love suggests a different perspective.</p>
+    </div>
+
+    <div class="block">
+      <p>Love may be less like a resource we distribute and more like a condition that emerges from identity. We instinctively care about what we experience as part of ourselves.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">When identity expands, the circle of love expands with it.</span></p>
+    </div>
+
+    <div class="block">
+      <p>In this sense, the deepest shift may not be learning how to give more love.</p>
+    </div>
+
+    <div class="block">
+      <p>It may be learning how to see ourselves more broadly.</p>
+    </div>
+
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span></span><div class="divider-line"></div></div>
+
+  <!-- ═════════════════════════════════════
+       XI. THE MOVEMENT OF IDENTITY
+  ═════════════════════════════════════ -->
+  <section class="essay-section" data-phase="oneness">
+
+    <div class="section-heading block">The Movement of Identity</div>
+
+    <div class="block">
+      <p>Identity itself is not fixed.</p>
+    </div>
+
+    <div class="block">
+      <p>At times it expands to include wider communities and shared humanity. At other times it contracts into narrower definitions of self. Some philosophical traditions suggest it may even dissolve entirely.</p>
+    </div>
+
+    <div class="block">
+      <p>These movements can feel liberating or destabilizing depending on the clarity behind them.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis-dim">Identity may expand to include everything or collapse into nothing.</span></p>
+    </div>
+
+    <div class="block">
+      <p>But when identity is understood clearly, it can be held lightly&thinsp;—&thinsp;allowing the circle of love to widen without losing our place within it.</p>
+    </div>
+
+  </section>
+
+  <div class="section-break"></div>
+
+  <!-- ═════════════════════════════════════
+       XII. ONENESS
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="section-heading block">Oneness</div>
+
+    <div class="block">
+      <p>Across cultures and philosophical traditions, a similar insight appears again and again: the boundary between self and other may not be as solid as it seems.</p>
+    </div>
+
+    <div class="block">
+      <p>Some traditions describe this realization as Oneness&thinsp;—&thinsp;the recognition that life is fundamentally interconnected.</p>
+    </div>
+
+    <div class="block">
+      <p>Seen through the lens of the Circle of Love, this insight takes on a practical meaning.</p>
+    </div>
+
+    <div class="triad block">
+      <p>When identity expands beyond the narrow self, the circle of love expands with it.</p>
+      <p>Compassion begins to arise not as an obligation, but as a natural response to a broader sense of belonging.</p>
+      <p>What once felt like "other" begins to feel closer to "self."</p>
+    </div>
+
+  </section>
+
+  <!-- ═════════════════════════════════════
+       THREE CIRCLES: SECOND SHARE ARTIFACT
+  ═════════════════════════════════════ -->
+  <div class="three-circles block">
+    <p class="three-circles-title">Three Circles of Love</p>
+    <div class="three-circles-grid">
+      <div class="three-circles-col">
+        <div class="tc-ring tc-ring-small"></div>
+        <p class="tc-label">Small Circle</p>
+        <p class="tc-scope">Self · Tribe</p>
+        <p class="tc-result">Protection, exclusion, conflict</p>
+      </div>
+      <div class="three-circles-col">
+        <div class="tc-ring tc-ring-medium"></div>
+        <p class="tc-label">Expanding Circle</p>
+        <p class="tc-scope">Humanity</p>
+        <p class="tc-result">Empathy, cooperation, moral progress</p>
+      </div>
+      <div class="three-circles-col">
+        <div class="tc-ring tc-ring-boundless"></div>
+        <p class="tc-label">Boundaryless Circle</p>
+        <p class="tc-scope">Oneness</p>
+        <p class="tc-result">Compassion as default</p>
+      </div>
+    </div>
+    <p class="three-circles-footer">Moral progress is the expansion of the Circle of Love.</p>
+  </div>
+
+  <div class="section-break-large"></div>
+
+  <!-- ═════════════════════════════════════
+       XIII. THE REFRAME
+  ═════════════════════════════════════ -->
+  <section class="essay-section" data-phase="resolve">
+
+    <div class="section-heading block">The Reframe</div>
+
+    <div class="block">
+      <p>If the boundaries of identity determine the boundaries of love, the challenge facing humanity begins to look different.</p>
+    </div>
+
+    <div class="block">
+      <p>The problem may not be that people lack compassion.</p>
+    </div>
+
+    <div class="block">
+      <p>The human capacity for love appears again and again&thinsp;—&thinsp;within families, communities, and causes people care deeply about.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">What changes is the size of the circle that receives it.</span></p>
+    </div>
+
+    <div class="triad block">
+      <p>When identity is drawn narrowly, love protects only a few.</p>
+      <p>When identity widens, the circle widens with it.</p>
+      <p>When identity dissolves, the circle has no edge at all.</p>
+    </div>
+
+    <!-- PERSPECTIVE FLIP -->
+    <div class="block">
+      <p>Every person believes their circle is reasonable.</p>
+    </div>
+
+    <div class="block">
+      <p>We protect what feels like "us." We distrust what feels like "them."</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis-dim">But someone else, somewhere, is drawing their circle in a way that places you outside it.</span></p>
+    </div>
+
+    <div class="block">
+      <p>Humanity may not need to learn how to love.</p>
+    </div>
+
+    <!-- TITLE ECHO -->
+    <div class="block">
+      <p>It may simply need to expand the Circle of Love.</p>
+    </div>
+
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><span></span><div class="divider-line"></div></div>
+
+  <!-- ═════════════════════════════════════
+       XIV. A DEEPER QUESTION
+  ═════════════════════════════════════ -->
+  <section class="essay-section">
+
+    <div class="section-heading block">A Deeper Question</div>
+
+    <div class="block">
+      <p>If identity determines the boundaries of love, something even deeper becomes visible.</p>
+    </div>
+
+    <div class="block">
+      <p>Our experience of the world changes with what we believe ourselves to be. When identity narrows, compassion narrows. When identity expands, compassion expands with it.</p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">Which raises a deeper question:</span></p>
+    </div>
+
+    <div class="block">
+      <p><span class="emphasis">Why does identity shape human experience so profoundly in the first place?</span></p>
+    </div>
+
+  </section>
+
+  <!-- ═════════════════════════════════════
+       FINALE
+  ═════════════════════════════════════ -->
+  <div class="section-break-large"></div>
+
+  <section class="finale" data-phase="finale">
+    <div class="block">
+      <p>Because the world does not suffer from a lack of love.</p>
+    </div>
+    <div class="block">
+      <p class="final-line">It suffers from circles that are too small.</p>
+    </div>
+  </section>
+
+  <div class="section-break"></div>
+
+  <div class="colophon">
+    <p>Ultimate Freedom Mastery</p>
+  </div>
+
+</div>
+
+<script>
+(function() {
+
+  // ═══════════════════════════════
+  // CUSTOM CURSOR
+  // ═══════════════════════════════
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  });
+
+  (function cursorLoop() {
+    rx += (mx - rx) * 0.13; ry += (my - ry) * 0.13;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(cursorLoop);
+  })();
+
+  document.querySelectorAll('a, .pull-quote, .identity-lens, .thought-experiment, .diagram-container, .three-circles').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; ring.style.borderColor = 'rgba(201,169,110,0.65)'; });
+    el.addEventListener('mouseleave', () => { ring.style.width = '34px'; ring.style.height = '34px'; ring.style.borderColor = 'rgba(201,169,110,0.35)'; });
+  });
+
+  // ═══════════════════════════════
+  // SCROLL PROGRESS
+  // ═══════════════════════════════
+  const progressBar = document.getElementById('scrollProgress');
+
+  function updateProgress() {
+    const scrollTop = window.pageYOffset;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+
+  // ═══════════════════════════════
+  // REVEAL BLOCKS ON SCROLL
+  // ═══════════════════════════════
+  const blocks = document.querySelectorAll('.block');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { root: null, rootMargin: '0px 0px -60px 0px', threshold: 0.15 });
+
+  blocks.forEach(block => observer.observe(block));
+
+  // ═══════════════════════════════
+  // PHASE TRANSITIONS
+  // ═══════════════════════════════
+  const phaseSections = document.querySelectorAll('[data-phase]');
+
+  const phaseObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.body.setAttribute('data-phase', entry.target.getAttribute('data-phase'));
+      }
+    });
+  }, { root: null, rootMargin: '-30% 0px -30% 0px', threshold: 0 });
+
+  phaseSections.forEach(section => phaseObserver.observe(section));
+
+  function checkHero() {
+    if (window.pageYOffset < window.innerHeight * 0.5) {
+      document.body.setAttribute('data-phase', 'dormant');
+    }
+  }
+
+  // ═══════════════════════════════
+  // COMBINED SCROLL HANDLER
+  // ═══════════════════════════════
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateProgress();
+        checkHero();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  updateProgress();
+
+})();
+</script>
+
+</body>
+</html>
