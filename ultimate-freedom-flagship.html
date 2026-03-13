@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Freedom — The Hidden Structure Beneath Human Striving</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #060606;
+            --bg-section: #0a0a0a;
+            --gold: #c4a35a;
+            --gold-dim: rgba(196, 163, 90, 0.35);
+            --gold-glow: rgba(196, 163, 90, 0.08);
+            --text-primary: rgba(255, 255, 255, 0.88);
+            --text-secondary: rgba(255, 255, 255, 0.58);
+            --text-dim: rgba(255, 255, 255, 0.35);
+            --serif: 'Cormorant Garamond', 'Georgia', serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg-deep);
+        }
+
+        body {
+            font-family: var(--serif);
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.85;
+            font-size: 19px;
+            font-weight: 300;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            background: radial-gradient(ellipse at 50% 40%, rgba(196, 163, 90, 0.04) 0%, transparent 60%),
+                        var(--bg-deep);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 120px;
+            background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+            opacity: 0;
+            animation: heroLine 2s ease 1.8s forwards;
+        }
+
+        @keyframes heroLine {
+            to { opacity: 1; }
+        }
+
+        .hero-title {
+            font-family: var(--serif);
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 300;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+            line-height: 1.15;
+        }
+
+        .hero-subtitle {
+            font-family: var(--serif);
+            font-size: clamp(1rem, 2.2vw, 1.35rem);
+            font-weight: 300;
+            font-style: italic;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+        }
+
+        .hero-marker {
+            width: 40px;
+            height: 1px;
+            background: var(--gold-dim);
+            margin-top: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.3s forwards;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* === CONTENT === */
+        .essay-body {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 2rem 8rem;
+        }
+
+        .section {
+            padding: 5rem 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section + .section {
+            border-top: 1px solid rgba(196, 163, 90, 0.08);
+        }
+
+        /* === TYPOGRAPHY === */
+        p {
+            margin-bottom: 1.6rem;
+            color: var(--text-primary);
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        .dim {
+            color: var(--text-secondary);
+        }
+
+        .gold {
+            color: var(--gold);
+        }
+
+        .indent-block {
+            padding-left: 2rem;
+            border-left: 1px solid rgba(196, 163, 90, 0.15);
+            margin: 2.2rem 0;
+        }
+
+        .indent-block p {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 0.6rem;
+            font-size: 1.02em;
+        }
+
+        .section-heading {
+            font-family: var(--serif);
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            font-weight: 300;
+            color: var(--gold);
+            letter-spacing: 0.04em;
+            margin-bottom: 2.5rem;
+            line-height: 1.3;
+        }
+
+        .strong-line {
+            font-style: italic;
+            color: var(--gold);
+            display: block;
+            margin: 2.5rem 0;
+            font-size: 1.08em;
+            line-height: 1.7;
+        }
+
+        .breath {
+            height: 3.5rem;
+        }
+
+        .breath-sm {
+            height: 1.8rem;
+        }
+
+        /* Cascade lists — poetic not bulleted */
+        .cascade {
+            margin: 1.8rem 0;
+            padding-left: 0;
+        }
+
+        .cascade p {
+            margin-bottom: 0.35rem;
+            color: var(--text-secondary);
+            font-size: 0.98em;
+        }
+
+        .cascade p:first-child {
+            color: var(--text-primary);
+            font-size: 1em;
+        }
+
+        /* Section divider ornament */
+        .ornament {
+            text-align: center;
+            padding: 3rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .ornament.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ornament span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border: 1px solid var(--gold-dim);
+            transform: rotate(45deg);
+        }
+
+        .ornament span:nth-child(2) {
+            margin: 0 1.2rem;
+            width: 8px;
+            height: 8px;
+            border-color: var(--gold);
+        }
+
+        /* Closing section */
+        .closing {
+            text-align: center;
+            padding: 6rem 0 4rem;
+        }
+
+        .closing p {
+            font-size: 1.05em;
+        }
+
+        .closing .strong-line {
+            font-size: 1.15em;
+            display: block;
+            margin: 2rem auto;
+        }
+
+        .final-line {
+            font-family: var(--serif);
+            font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+            font-weight: 400;
+            color: var(--gold);
+            font-style: italic;
+            letter-spacing: 0.02em;
+            line-height: 1.6;
+            margin-top: 3.5rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(196, 163, 90, 0.15);
+        }
+
+        /* Footer */
+        .essay-footer {
+            text-align: center;
+            padding: 4rem 2rem 6rem;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        .essay-footer.visible {
+            opacity: 1;
+        }
+
+        .essay-footer .footer-mark {
+            width: 40px;
+            height: 1px;
+            background: var(--gold-dim);
+            margin: 0 auto 2rem;
+        }
+
+        .essay-footer p {
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                font-size: 17px;
+                line-height: 1.8;
+            }
+
+            .essay-body {
+                padding: 0 1.5rem 6rem;
+            }
+
+            .section {
+                padding: 3.5rem 0;
+            }
+
+            .indent-block {
+                padding-left: 1.3rem;
+            }
+
+            .hero {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 16px;
+            }
+
+            .essay-body {
+                padding: 0 1.2rem 5rem;
+            }
+
+            .section {
+                padding: 2.8rem 0;
+            }
+        }
+
+        /* Scroll progress */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-dim));
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.15s linear;
+        }
+    </style>
+</head>
+<body data-piece-id="ultimate-freedom-flagship">
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- HERO -->
+<header class="hero">
+    <h1 class="hero-title">Ultimate Freedom</h1>
+    <p class="hero-subtitle">The hidden structure beneath human striving</p>
+    <div class="hero-marker"></div>
+</header>
+
+<!-- ESSAY -->
+<main class="essay-body">
+
+    <!-- I. THE STRANGE SIMILARITY -->
+    <div class="section">
+        <p>At first glance, human life looks like a field of radically different pursuits.</p>
+
+        <div class="cascade">
+            <p>One person wants money.</p>
+            <p>Another wants love.</p>
+            <p>Another wants recognition.</p>
+            <p>Another wants peace and solitude.</p>
+            <p>Another wants power.</p>
+            <p>Another wants safety.</p>
+            <p>Another wants healing.</p>
+            <p>Another wants revenge.</p>
+            <p>Another wants to disappear.</p>
+            <p>Another wants enlightenment.</p>
+        </div>
+
+        <div class="breath-sm"></div>
+
+        <p>From the outside, these lives can seem to be organized around entirely different aims. Different values. Different priorities. Different obsessions. Different definitions of a life well lived.</p>
+
+        <p>But beneath that variety, there is often a deeper similarity.</p>
+
+        <p>The visible pursuit is not always the deepest pursuit.</p>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- II. THE SEARCH BENEATH THE SEARCH -->
+    <div class="section">
+        <p>What people chase is rarely just the thing itself.</p>
+
+        <p>It is what they believe the thing will finally allow them to feel.</p>
+
+        <div class="breath"></div>
+
+        <p>Money is rarely only about money. It is often about relief. Security. Ease. Freedom from pressure. Permission to breathe.</p>
+
+        <p>Romance is rarely only about romance. It is often about being chosen. Being met. Being held. Being known. Being loved.</p>
+
+        <p>Success is rarely only about success. It is often about worth. Arrival. Rest. Inner permission. The hope that one day the striving will end.</p>
+
+        <p>Control is rarely only about control. It is often about safety. Predictability. Protection from pain. An attempt to quiet what feels unmanageable inside.</p>
+
+        <p>Even pleasure is often not just pleasure. It can be relief. Escape. Lightness. A break from friction. A temporary return to something softer and more livable.</p>
+
+        <div class="breath-sm"></div>
+
+        <p>And even destructive pursuits often reveal the same pattern in distorted form.</p>
+
+        <p class="dim">Revenge can be an attempt to restore dignity. Domination can be an attempt to recover safety. Numbing can be an attempt to find peace by force when peace cannot be found any other way. Clinging can be an attempt to secure love where love feels uncertain. Endless performance can be an attempt to earn the right to feel okay.</p>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- III. THE DEEPER QUESTION -->
+    <div class="section">
+        <p>This is why so much human behavior becomes more intelligible when you look beneath its object and ask a deeper question:</p>
+
+        <span class="strong-line">What state of being is this person trying to secure through this?</span>
+
+        <p>That question changes things.</p>
+
+        <p>Because beneath much of human striving, there is a quieter search. Not always named directly. Not always consciously understood. But present all the same.</p>
+
+        <div class="indent-block">
+            <p>A search for peace.</p>
+            <p>A search for love.</p>
+            <p>A search for happiness.</p>
+        </div>
+
+        <p>Not necessarily those exact words. But that structural direction.</p>
+
+        <div class="breath"></div>
+
+        <p>Peace in the broad sense: inner settledness, relief, okayness, safety, the end of torment, the loosening of friction.</p>
+
+        <p>Love in the broad sense: belonging, connection, intimacy, warmth, acceptance, meaningful relation, the felt experience of not being existentially alone.</p>
+
+        <p>Happiness in the broad sense: joy, aliveness, delight, fulfillment, expansion, the simple goodness of being alive.</p>
+
+        <div class="breath-sm"></div>
+
+        <p>These are not shallow lifestyle words. They are not decorative ideals. They are among the deepest qualities of experience human beings seek.</p>
+
+        <p>And most people, in one way or another, organize their lives around trying to reach them.</p>
+
+        <p>Not because they are weak. Not because they are naïve.</p>
+
+        <p>But because they are aiming at something real.</p>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- IV. THE PROBLEM -->
+    <div class="section">
+        <p>The problem is usually not the longing.</p>
+
+        <p>The problem is where the longing gets placed.</p>
+
+        <div class="breath"></div>
+
+        <p>Most people are taught, explicitly or implicitly, to treat peace, love, and happiness as consequences of circumstance.</p>
+
+        <div class="indent-block">
+            <p>Be successful, then you can rest.</p>
+            <p>Be chosen, then you can feel loved.</p>
+            <p>Get safe enough, then you can finally relax.</p>
+            <p>Become important enough, then you can feel worthy.</p>
+            <p>Control enough variables, then you can have peace.</p>
+            <p>Find the right person, then you can be whole.</p>
+            <p>Reach the next level, then you can be happy.</p>
+        </div>
+
+        <p>So the deepest condition of life gets outsourced. Handed over to outcomes. To approval. To money. To status. To roles. To relationships. To identity. To the future. To what changes.</p>
+
+        <p>And once that happens, peace becomes conditional. Love becomes conditional. Happiness becomes conditional.</p>
+
+        <span class="strong-line">Anything conditional becomes fragile.</span>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- V. THE QUIET TRAGEDY -->
+    <div class="section">
+        <p>This is where so much suffering begins.</p>
+
+        <p>Not simply because people want too much.</p>
+
+        <p>But because they ask unstable things to carry the weight of what matters most.</p>
+
+        <div class="breath"></div>
+
+        <p>External life matters. Deeply. Relationships matter. Health matters. Justice matters. Money matters. Beauty matters. Safety matters. The shape of a life matters.</p>
+
+        <p>But none of these can reliably serve as the final foundation of your deepest condition of being.</p>
+
+        <p>They can influence it. They can support it. They can express it beautifully. They can make life richer, safer, more spacious, more humane.</p>
+
+        <p>But they cannot bear unlimited metaphysical weight.</p>
+
+        <div class="breath"></div>
+
+        <p>This is why getting what you thought you wanted so often fails to produce the completion you expected.</p>
+
+        <p class="dim">The success arrives, and the relief fades. The relationship begins, and the old fear remains. The money grows, and the nervous system still does not know how to rest. The recognition comes, and peace does not. The spiritual insight breaks through, and yet embodiment lags far behind.</p>
+
+        <div class="breath-sm"></div>
+
+        <p>This does not mean the achievement meant nothing. It does not mean the relationship is meaningless. It does not mean money, beauty, intimacy, or accomplishment are illusions.</p>
+
+        <p>It means they were carrying more expectation than they could fulfill.</p>
+
+        <p>They were being asked not merely to enrich life, but to become its source.</p>
+
+        <span class="strong-line">That is too much to ask of anything that changes.</span>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- VI. THE SYMBOL AND THE SOURCE -->
+    <div class="section">
+        <p>This is one of the great quiet tragedies of human life.</p>
+
+        <p>People often spend years pursuing symbols of a state they do not yet know how to live directly.</p>
+
+        <div class="indent-block">
+            <p>Recognition in the hope of worth.</p>
+            <p>Performance in the hope of peace.</p>
+            <p>Attachment in the hope of love.</p>
+            <p>Control in the hope of safety.</p>
+            <p>Pleasure in the hope of happiness.</p>
+            <p>Power in the hope of rest.</p>
+        </div>
+
+        <p>And because the symbol is confused with the source, the chase becomes endless.</p>
+
+        <p>Even when it works for a while, it rarely works for long.</p>
+
+        <span class="strong-line">Because what is unstable cannot reliably secure what you most deeply depend on.</span>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- VII. MISLOCATED FREEDOM -->
+    <div class="section">
+        <p>This is where the question of freedom becomes far more serious than it first appears.</p>
+
+        <p>Most people think of freedom in external terms. Freedom to do what I want. Freedom from restriction. Freedom through money. Freedom through mobility. Freedom through power. Freedom through perfect conditions.</p>
+
+        <p>And external freedom does matter. A life with more spaciousness, less coercion, more choice, and less unnecessary suffering is often a better life.</p>
+
+        <p>But external freedom alone does not resolve the deeper issue.</p>
+
+        <p>A person can have money and no peace. Relationships and no love. Pleasure and no happiness. Status and no rest. Mobility and no freedom.</p>
+
+        <p>Because if your peace depends entirely on circumstance, your love depends entirely on response, and your happiness depends entirely on outcome, then your life remains structurally outsourced.</p>
+
+        <span class="strong-line">And whatever is outsourced remains vulnerable.</span>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- VIII. THE RESTORATION OF SOURCE -->
+    <div class="section">
+        <p>That is why Ultimate Freedom is not merely freedom in the ordinary sense.</p>
+
+        <p>It is not just the ability to do more, have more, control more, avoid more, or arrange life more favorably.</p>
+
+        <p>It is deeper than that.</p>
+
+        <p class="gold">Ultimate Freedom begins when peace, love, and happiness are no longer treated as fragile rewards granted by circumstance, but as ways of being that can be consciously lived.</p>
+
+        <div class="breath-sm"></div>
+
+        <p>It is the restoration of source.</p>
+
+        <p>Not the discovery of something you never had. The return of something that was displaced.</p>
+
+        <p>Not the rejection of the world. Not indifference to life. Not passivity. Not spiritual bypassing. Not pretending circumstances do not matter.</p>
+
+        <p>It is the recognition that the deepest condition of life cannot safely be handed over entirely to what changes.</p>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- IX. NOT PASSIVITY -->
+    <div class="section">
+        <p>This is not an argument against ambition.</p>
+
+        <p>You can still build. Still create. Still love. Still earn. Still pursue beauty. Still seek justice. Still improve your circumstances. Still care deeply about what happens in your life and in the world.</p>
+
+        <p>The point is not to stop participating.</p>
+
+        <p>The point is to stop asking participation to become your only source.</p>
+
+        <div class="breath"></div>
+
+        <p>You can enjoy external beauty without making it the basis of your being. You can pursue success without worshiping it. You can love another person without handing them sole custody of your heart. You can build a meaningful life without requiring every part of it to determine whether you are finally allowed to be at peace.</p>
+
+        <p>That is not detachment in the deadened sense.</p>
+
+        <p>It is a deeper form of intimacy with life.</p>
+
+        <p>Because once what you most deeply seek is no longer treated as entirely outside you, the world no longer has to carry an impossible burden. It can be loved more cleanly. Built more honestly. Pursued more freely.</p>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- X. WHAT THIS REVEALS ABOUT OTHERS -->
+    <div class="section">
+        <p>This also changes how you see other people.</p>
+
+        <p>Once the hidden structure becomes visible, behavior that once seemed merely irrational, weak, shallow, or cruel often becomes more understandable. Not excusable. Understandable.</p>
+
+        <span class="strong-line">A confused strategy can still be organized around a real longing.</span>
+
+        <p>That matters. Because moral condemnation without understanding often blinds itself to the structure producing the behavior in the first place.</p>
+
+        <div class="breath-sm"></div>
+
+        <p class="dim">A person may be grasping for peace in a form that destroys peace. Grasping for love in a form that suffocates love. Grasping for happiness in a form that deepens misery.</p>
+
+        <div class="breath-sm"></div>
+
+        <p>The strategy may be distorted. The behavior may be harmful. The consequences may be severe.</p>
+
+        <p>But the deeper search is often still there, underneath the distortion.</p>
+
+        <p>This creates a more serious compassion. Not sentimental compassion. Not permissive compassion. A compassion that sees more clearly.</p>
+
+        <p>It understands that much of human confusion is not random. It is organized around a longing repeatedly handed the wrong address.</p>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- XI. THE DEEPER DIGNITY -->
+    <div class="section">
+        <p>That may be one of the most important recognitions in the whole inquiry.</p>
+
+        <p>Because it means human beings are not foolish for wanting so much.</p>
+
+        <p>In a sense, they are right to want so much.</p>
+
+        <div class="breath-sm"></div>
+
+        <p>Peace is not a trivial desire. Love is not a childish desire. Happiness is not a shallow desire.</p>
+
+        <p>These are among the deepest things a life can seek.</p>
+
+        <p>The tragedy is not the longing itself.</p>
+
+        <p>The tragedy is that people are taught to search for what is deepest in places too unstable to hold it.</p>
+
+        <div class="breath-sm"></div>
+
+        <p class="dim">So they chase harder. Cling harder. Fear more. Control more. Perform more. Defend more.</p>
+
+        <p>Not always because they are chasing the wrong thing.</p>
+
+        <span class="strong-line">Often because they are chasing the right thing through the wrong structure.</span>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- XII. WHAT CHANGES WHEN THE STRUCTURE IS SEEN -->
+    <div class="section">
+        <p>That is why this matters.</p>
+
+        <p>Because once you see what you are really after, several illusions begin to loosen.</p>
+
+        <p>You become less seduced by symbols. Less likely to mistake acquisition for resolution. Less likely to expect the world to solve what only a deeper way of being can stabilize. More honest about your desire. More compassionate toward your own past. More able to see the strategies you learned without mistaking them for your essence.</p>
+
+        <div class="breath"></div>
+
+        <p>Seeing the hidden structure does not make desire disappear.</p>
+
+        <p>It makes desire intelligible.</p>
+
+        <p>And when desire becomes intelligible, life changes.</p>
+
+        <div class="breath-sm"></div>
+
+        <p>You can still pursue things. But with less confusion. Less desperation. Less metaphysical burden.</p>
+
+        <p class="dim">You can let relationships be relationships instead of salvation projects. Let success be success instead of proof of existence. Let money be money instead of the final guarantor of inner rest. Let spiritual insight be insight instead of a costume for unresolved pain.</p>
+
+        <p>You can participate fully without being fully possessed.</p>
+
+        <span class="strong-line">That is where a different kind of freedom begins.</span>
+    </div>
+
+    <div class="ornament"><span></span><span></span><span></span></div>
+
+    <!-- XIII. CLOSING -->
+    <div class="section closing">
+        <p>Not freedom from all pain. Not freedom from all loss. Not freedom from the changing nature of life.</p>
+
+        <p>A deeper freedom.</p>
+
+        <p>The freedom that appears when what you most deeply seek is no longer entirely outsourced to circumstance.</p>
+
+        <div class="breath"></div>
+
+        <p>That does not make outer life irrelevant.</p>
+
+        <p>It makes outer life beautiful again.</p>
+
+        <p class="dim">Because now it can be what it is: expression, participation, relationship, creation, play, service, art, love. Not the sole source of your peace. Not the sole source of your worth. Not the sole source of your happiness. Not the final authority over whether your life is allowed to feel whole.</p>
+
+        <div class="breath"></div>
+
+        <p>Human beings chase countless things. Some noble. Some distorted. Some tender. Some destructive. Some generous. Some desperate.</p>
+
+        <p>But beneath much of that movement lies a search for peace, love, and happiness.</p>
+
+        <p>That is not a shallow truth. It is one of the deepest truths in ordinary life.</p>
+
+        <div class="breath-sm"></div>
+
+        <p>The mistake was never wanting them.</p>
+
+        <p>The mistake was handing the authority for them entirely to what changes.</p>
+
+        <div class="breath"></div>
+
+        <p class="final-line">Ultimate Freedom begins when the source is restored.<br><br>
+        <span class="dim" style="font-size: 0.82em; font-style: normal; letter-spacing: 0.02em;">When peace is no longer only something you hope circumstance will grant.<br>
+        When love is no longer only something you beg the world to confirm.<br>
+        When happiness is no longer only something you postpone until everything goes right.</span></p>
+    </div>
+
+</main>
+
+<!-- SITE NAVIGATION (config-driven) -->
+<script src="/site-config.js"></script>
+<script src="/site-nav.js"></script>
+
+<script>
+    // Scroll-triggered reveals
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -60px 0px'
+    });
+
+    document.querySelectorAll('.section, .ornament').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Progress bar
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = (scrollTop / docHeight) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+    });
+</script>
+
+</body>
+</html>
