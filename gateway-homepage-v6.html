@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultimate Freedom Mastery</title>
+  <meta name="description" content="Where human experience stops looking random and starts revealing structure.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-deep:       #0a0a0a;
+      --bg-surface:    #0f0f0f;
+      --bg-card:       #141413;
+      --bg-card-hover: #1a1918;
+      --gold:          #c9a84c;
+      --gold-dim:      #a08535;
+      --gold-soft:     #b89a45;
+      --gold-glow:     rgba(201, 168, 76, 0.06);
+      --text-primary:  #e8e4dc;
+      --text-secondary:#9a958c;
+      --text-dim:      #6b665e;
+      --border:        rgba(201, 168, 76, 0.10);
+      --border-hover:  rgba(201, 168, 76, 0.22);
+
+      --font-display:  'Cormorant Garamond', Georgia, serif;
+      --font-body:     'Cormorant Garamond', Georgia, serif;
+      --font-ui:       'Raleway', Arial, sans-serif;
+
+      --max-width:     800px;
+      --page-pad:      clamp(1.5rem, 5vw, 4rem);
+      --entry-pad:     clamp(1.75rem, 7vw, 8vw);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(201, 168, 76, 0.35) var(--bg-deep);
+    }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+      line-height: 1.75;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: rgba(201, 168, 76, 0.35); border-radius: 2px; }
+
+    a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.35s ease;
+    }
+    a:hover { color: var(--text-primary); }
+
+    ::selection {
+      background: rgba(201, 168, 76, 0.2);
+      color: var(--text-primary);
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1),
+                  transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .js-ready .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .js-ready .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+    .reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+    .reveal-stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
+    .reveal-stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
+    .reveal-stagger > .reveal:nth-child(5) { transition-delay: 0.4s; }
+
+    .page-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--page-pad);
+    }
+
+    /* ─── Entry experience ───────────────────────────────────── */
+    .entry-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10vh var(--entry-pad);
+      position: relative;
+    }
+
+    .entry-content {
+      max-width: 720px;
+      width: 100%;
+    }
+
+    .entry-section h1,
+    .entry-section h2,
+    .entry-section h3 {
+      font-family: var(--font-display);
+      font-weight: 300;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+    }
+
+    .entry-section p {
+      font-size: clamp(1rem, 1.5vw, 1.125rem);
+      margin-bottom: 1.8em;
+      letter-spacing: 0.015em;
+    }
+
+    .entry-accent { color: var(--gold); }
+    .entry-dim { color: rgba(232, 228, 220, 0.55); }
+
+    .entry-section em {
+      font-style: italic;
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+
+    .entry-hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 7rem var(--entry-pad) 9rem;
+    }
+
+    .entry-hero::before,
+    .entry-close::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(600px, 70vw);
+      height: min(600px, 70vw);
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse, var(--gold-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .entry-hero-overline {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 3rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroIn 1s 0.3s forwards;
+    }
+
+    .entry-hero-title {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1.15;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroIn 1s 0.6s forwards;
+    }
+
+    .entry-hero-sub {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      color: var(--text-secondary);
+      max-width: 620px;
+      line-height: 1.9;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroIn 1s 0.9s forwards;
+    }
+
+    .entry-scroll-cue {
+      position: absolute;
+      bottom: 6vh;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeInCue 1s 2.5s forwards;
+    }
+
+    .entry-scroll-cue span {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(232, 228, 220, 0.25);
+    }
+
+    .entry-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(201, 168, 76, 0.4), transparent);
+      animation: pulse-line 2s ease-in-out infinite;
+    }
+
+    @keyframes heroIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInCue { to { opacity: 1; } }
+    @keyframes pulse-line {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .entry-divider {
+      width: 60px;
+      height: 1px;
+      background: rgba(201, 168, 76, 0.4);
+      margin: 0 0 3rem 0;
+    }
+    .entry-divider.centered {
+      margin: 0 auto 3rem;
+    }
+
+    .entry-surface { background: var(--bg-deep); }
+    .entry-name,
+    .entry-consequence {
+      background: #0c0c0c;
+    }
+    .entry-name::before,
+    .entry-consequence::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201, 168, 76, 0.4), transparent);
+    }
+    .entry-distinguish,
+    .entry-close { background: var(--bg-deep); }
+
+    .entry-surface-lead,
+    .entry-consequence-lead {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 300;
+      color: var(--text-primary);
+      line-height: 1.55;
+      margin-bottom: 2.5rem;
+    }
+
+    .entry-recognition {
+      border-left: 1px solid rgba(201, 168, 76, 0.4);
+      padding: 1.5rem 0 1.5rem 2rem;
+      margin: 2.5rem 0;
+    }
+    .entry-recognition p {
+      font-family: var(--font-display);
+      font-size: clamp(1.15rem, 2vw, 1.35rem);
+      font-style: italic;
+      color: var(--text-primary);
+      line-height: 1.75;
+      margin-bottom: 0;
+    }
+
+    .entry-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      color: rgba(232, 228, 220, 0.5);
+    }
+
+    .entry-name-statement {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 300;
+      color: var(--text-primary);
+      line-height: 1.45;
+      margin-bottom: 3rem;
+    }
+
+    .entry-layer-diagram {
+      margin: 3.5rem 0;
+      position: relative;
+    }
+    .entry-layer {
+      padding: 1.5rem 2rem;
+      margin-bottom: 1px;
+      position: relative;
+      transition: all 0.4s ease;
+    }
+    .entry-layer-surface {
+      background: rgba(232, 228, 220, 0.03);
+      border: 1px solid rgba(232, 228, 220, 0.06);
+    }
+    .entry-layer-deep {
+      background: rgba(201, 168, 76, 0.04);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+    }
+    .entry-layer-label {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .entry-layer-surface .entry-layer-label { color: rgba(232, 228, 220, 0.25); }
+    .entry-layer-deep .entry-layer-label { color: var(--gold); }
+    .entry-layer-text {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+    .entry-layer-surface .entry-layer-text { color: var(--text-secondary); }
+    .entry-layer-deep .entry-layer-text { color: var(--text-primary); }
+    .entry-layer-arrow {
+      text-align: center;
+      padding: 1rem 0;
+      color: rgba(201, 168, 76, 0.4);
+      font-size: 0.8rem;
+    }
+
+    .entry-marker {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      align-items: flex-start;
+    }
+    .entry-marker-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.2rem;
+    }
+    .entry-marker-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.5;
+    }
+    .entry-marker-body h3 {
+      font-size: 1.15rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .entry-marker-body p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    .entry-close {
+      min-height: 80vh;
+      text-align: center;
+      position: relative;
+      padding-bottom: 8rem;
+    }
+    .entry-close-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--text-primary);
+      line-height: 1.4;
+      margin-bottom: 2rem;
+    }
+    .entry-close-sub {
+      font-size: clamp(1rem, 1.5vw, 1.1rem);
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      line-height: 1.8;
+    }
+    .entry-cta-link {
+      display: inline-block;
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      padding: 1rem 2.5rem;
+      border: 1px solid rgba(201, 168, 76, 0.4);
+      transition: all 0.5s ease;
+      font-weight: 500;
+    }
+    .entry-cta-link:hover {
+      background: rgba(201, 168, 76, 0.08);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .entry-close-note {
+      margin-top: 1.2rem;
+      font-size: 0.75rem;
+      color: rgba(232, 228, 220, 0.25);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── Gateway sections ─────────────────────────────────────── */
+    .section {
+      padding: clamp(4.5rem, 9vh, 7rem) 0;
+    }
+    .section-divider {
+      width: 36px;
+      height: 1px;
+      background: var(--gold-dim);
+      margin: 0 auto;
+      opacity: 0.4;
+    }
+    .section-label {
+      font-family: var(--font-display);
+      font-size: clamp(0.63rem, 0.95vw, 0.74rem);
+      font-weight: 400;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 1rem;
+    }
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+      font-weight: 300;
+      line-height: 1.3;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+    .section-description {
+      color: var(--text-secondary);
+      font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+      font-style: italic;
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+      line-height: 1.65;
+    }
+
+    .start-here {
+      text-align: center;
+      padding: clamp(5rem, 10vh, 8rem) 0;
+    }
+    .start-here .section-heading { margin-bottom: 0.5rem; }
+    .start-here-card {
+      display: block;
+      max-width: 560px;
+      margin: 2.5rem auto 0;
+      padding: 2.5rem 2.2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      text-align: left;
+      position: relative;
+      transition: border-color 0.5s ease, background 0.5s ease, transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .start-here-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .start-here-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+    }
+    .start-here-card:hover::before { opacity: 0.35; }
+    .start-here-card .card-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+      font-weight: 400;
+      color: var(--text-primary);
+      margin-bottom: 0.7rem;
+      line-height: 1.3;
+    }
+    .start-here-card .card-summary {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+    .start-here-card .card-meta {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+
+    .pathway-grid {
+      display: grid;
+      gap: 1.1rem;
+    }
+    .piece-card {
+      display: block;
+      padding: 1.6rem 1.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      position: relative;
+      transition: border-color 0.5s ease, background 0.5s ease, transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .piece-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      color: var(--text-primary);
+    }
+    .piece-card .card-role {
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.55rem;
+      font-weight: 400;
+    }
+    .piece-card .card-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 1.9vw, 1.35rem);
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.35;
+      margin-bottom: 0.45rem;
+    }
+    .piece-card .card-detail {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .piece-card.series-hub {
+      border-color: rgba(201, 168, 76, 0.16);
+      padding: 1.8rem 1.75rem;
+    }
+    .piece-card.series-hub::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+      opacity: 0.25;
+    }
+    .piece-card.series-hub:hover::before { opacity: 0.4; }
+
+    .bridge-section,
+    .email-section {
+      text-align: center;
+      padding: clamp(4rem, 8vh, 6rem) 0;
+    }
+    .bridge-context,
+    .email-section p {
+      color: var(--text-dim);
+      font-size: clamp(0.88rem, 1.3vw, 0.98rem);
+      font-style: italic;
+      margin-bottom: 1.8rem;
+      line-height: 1.65;
+    }
+    .bridge-link {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+      color: var(--gold-dim);
+      padding: 0.9rem 2rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      letter-spacing: 0.02em;
+      transition: border-color 0.4s ease, color 0.4s ease, background 0.4s ease;
+    }
+    .bridge-link:hover {
+      border-color: var(--border-hover);
+      color: var(--gold);
+      background: var(--gold-glow);
+    }
+    .email-section {
+      max-width: 460px;
+      margin: 0 auto;
+    }
+    .email-section .section-heading {
+      font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+      margin-bottom: 0.6rem;
+    }
+
+    .site-footer {
+      text-align: center;
+      padding: 5rem 0 3rem;
+      border-top: 1px solid rgba(201, 168, 76, 0.05);
+    }
+    .footer-wordmark {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .footer-link {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-style: italic;
+      transition: color 0.35s ease;
+    }
+    .footer-link:hover { color: var(--gold-dim); }
+    .footer-tagline {
+      font-size: 0.78rem;
+      color: rgba(107, 102, 94, 0.6);
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .entry-section { padding: 8vh 6vw; }
+      .entry-recognition { padding-left: 1.2rem; }
+      .entry-layer { padding: 1.2rem 1.5rem; }
+      .entry-marker { gap: 1rem; }
+    }
+    @media (max-width: 600px) {
+      .footer-links {
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="entry-hero" id="top">
+    <div class="entry-content">
+      <div class="entry-hero-overline">Ultimate Freedom Mastery</div>
+      <h1 class="entry-hero-title">The Architecture<br>Beneath Your Experience</h1>
+      <p class="entry-hero-sub">There is a structural layer operating beneath your conscious thought. It shapes your perception, governs your reactions, and determines what feels possible — before you have a chance to choose. Most people have felt its effects their entire lives without recognizing its existence.</p>
+    </div>
+    <div class="entry-scroll-cue">
+      <span>Begin</span>
+      <div class="entry-scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="entry-section entry-surface" id="surface">
+    <div class="entry-content">
+      <div class="reveal">
+        <div class="entry-divider"></div>
+        <p class="entry-surface-lead">You've had at least one of these experiences.</p>
+      </div>
+
+      <div class="entry-recognition reveal">
+        <p>You know exactly the right move — strategically, even emotionally — and you still can't make it. Not because you lack the knowledge. Because something underneath the knowledge is running a different program.</p>
+      </div>
+
+      <div class="entry-recognition reveal">
+        <p>Your external life is fully optimized — the career, the resources, the freedom — and something internal is still generating an experience you didn't choose. Something you can feel but can't locate.</p>
+      </div>
+
+      <div class="entry-recognition reveal">
+        <p>You've watched yourself do the exact thing you'd decided not to do. That gap between your intention and your action isn't a willpower failure. It's something structural.</p>
+      </div>
+
+      <div class="reveal">
+        <p>If any of this is familiar, you've already felt the layer. You just didn't have a name for it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry-section entry-name" id="name">
+    <div class="entry-content">
+      <div class="reveal">
+        <div class="entry-divider"></div>
+        <p class="entry-eyebrow">The structural insight</p>
+      </div>
+
+      <div class="reveal">
+        <p class="entry-name-statement">Beneath your conscious thought — beneath what you think, what you feel, and what you decide — there is an <span class="entry-accent">architectural layer</span> that structures your lived experience. Your perception, your reactions, your sense of what's possible.</p>
+      </div>
+
+      <div class="reveal">
+        <p class="entry-name-statement" style="font-size: clamp(1.4rem, 2.5vw, 1.9rem);">Not your ideas about your experience. <em>The experience itself.</em></p>
+      </div>
+
+      <div class="reveal">
+        <p>This architecture has a shape. It was formed by everything you've lived through, and it now operates automatically — generating your reactions, your emotional weather, your sense of what's possible and what isn't. It runs beneath awareness, which is precisely why awareness alone doesn't change it.</p>
+      </div>
+
+      <div class="reveal">
+        <p>But architecture, unlike personality or temperament, is <em>structural</em>. And structure can be seen, understood, and worked with directly.</p>
+      </div>
+
+      <div class="reveal">
+        <p>This is what Ultimate Freedom Mastery does. It makes the invisible architecture visible — and workable.</p>
+      </div>
+
+      <div class="reveal">
+        <p>Visible in the patterns of reaction that repeat regardless of circumstance. In the gap between what you can see clearly and what you can actually enact. In the way certain situations collapse your range of choice while others don't. In what keeps destabilizing you long after you've understood it. These are not random. They are architectural — and once the structure is seen, it can be worked with directly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry-section entry-distinguish" id="distinguish">
+    <div class="entry-content">
+      <div class="reveal">
+        <div class="entry-divider"></div>
+        <p class="entry-eyebrow">A different depth</p>
+      </div>
+
+      <div class="reveal">
+        <p>Most approaches to growth, performance, and inner freedom operate at the level of <em>outputs</em> — what you think, what you feel, what you do. They work with the content of experience. Some do this extraordinarily well.</p>
+      </div>
+
+      <div class="reveal">
+        <p>UFM operates one layer beneath. At the level of what is <em>generating</em> the thinking, feeling, and doing.</p>
+      </div>
+
+      <div class="entry-layer-diagram reveal">
+        <div class="entry-layer entry-layer-surface">
+          <div class="entry-layer-label">Where most approaches work</div>
+          <div class="entry-layer-text">Thoughts · Emotions · Behaviors · Strategies · Decisions</div>
+        </div>
+        <div class="entry-layer-arrow">↓</div>
+        <div class="entry-layer entry-layer-deep">
+          <div class="entry-layer-label">Where UFM works</div>
+          <div class="entry-layer-text">The structural layer that generates all of the above</div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <p>When the architecture shifts, everything downstream shifts with it — not through effort or discipline, but because the source has changed. The experience changes because what's producing the experience has changed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry-section entry-consequence" id="consequence">
+    <div class="entry-content">
+      <div class="reveal">
+        <div class="entry-divider"></div>
+        <p class="entry-consequence-lead">What becomes possible when the architecture moves.</p>
+      </div>
+
+      <div class="entry-marker reveal">
+        <div class="entry-marker-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <div class="entry-marker-body">
+          <h3>Sovereignty under activation</h3>
+          <p>The ability to remain structurally stable when everything around you — or inside you — is in motion. Not calm as a performance. Calm as a structural reality.</p>
+        </div>
+      </div>
+
+      <div class="entry-marker reveal">
+        <div class="entry-marker-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>
+        </div>
+        <div class="entry-marker-body">
+          <h3>The gap closes</h3>
+          <p>The distance between what you can see and what you can enact collapses. Insight and action stop being separate events. What you know, you can do.</p>
+        </div>
+      </div>
+
+      <div class="entry-marker reveal">
+        <div class="entry-marker-icon">
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="entry-marker-body">
+          <h3>Freedom that doesn't depend on circumstance</h3>
+          <p>Not freedom from difficulty, but freedom within it. An internal architecture that generates peace, clarity, and authority regardless of what's happening externally.</p>
+        </div>
+      </div>
+
+      <div class="entry-marker reveal">
+        <div class="entry-marker-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3c4.97 0 9 4.03 9 9s-4.03 9-9 9"/><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9"/></svg>
+        </div>
+        <div class="entry-marker-body">
+          <h3>The return to authorship</h3>
+          <p>Your experience stops being something that happens to you and becomes something that flows from you. Not positive thinking. Structural authorship of the life you're actually living.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry-section entry-close" id="close">
+    <div class="entry-content">
+      <div class="reveal">
+        <div class="entry-divider centered"></div>
+      </div>
+      <div class="reveal">
+        <h2 class="entry-close-title">The layer is already there.<br>It's already shaping your experience.</h2>
+      </div>
+      <div class="reveal">
+        <p class="entry-close-sub">The only question is whether you see it — and whether you work with it directly.</p>
+      </div>
+      <div class="reveal">
+        <a href="#start-here" class="entry-cta-link">Begin</a>
+        <p class="entry-close-note">Enter the first essay</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="page-container">
+    <section class="start-here section" id="start-here">
+      <div>
+        <div class="section-label">Begin here</div>
+        <div class="section-heading">The clearest threshold into the larger body of work</div>
+      </div>
+      <div id="start-here-slot"></div>
+    </section>
+
+    <div class="section-divider reveal"></div>
+
+    <div id="pathways-container"></div>
+
+    <section class="bridge-section section">
+      <div class="reveal">
+        <p class="bridge-context">This library is the cinematic and philosophical layer.<br>The practical work continues at ufmastery.com.</p>
+        <a href="https://ufmastery.com" class="bridge-link">Enter the practical work &rarr;</a>
+      </div>
+    </section>
+
+    <div class="section-divider reveal"></div>
+
+    <section class="email-section section">
+      <div class="reveal">
+        <div class="section-heading">Stay in this work</div>
+        <p>Occasional writing on identity, structure, and freedom. Quietly sent.</p>
+        <a href="https://ufmastery.com/subscribe" class="bridge-link">Subscribe &rarr;</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-wordmark">Ultimate Freedom Mastery</div>
+      <div class="footer-links">
+        <a href="https://ufmastery.com" class="footer-link">ufmastery.com</a>
+        <a href="https://now.ufmastery.com" class="footer-link">now.ufmastery.com</a>
+      </div>
+      <div class="footer-tagline">Cinematic essays and entry points into the larger body of work.</div>
+    </footer>
+  </div>
+
+  <script>
+/**
+ * now.ufmastery.com — Site Configuration
+ * 
+ * This is the single source of truth for all cinematic pieces.
+ * The gateway homepage, navigation, related reads, and cross-links
+ * all read from this file.
+ *
+ * To add a new piece:
+ *   1. Create the HTML file
+ *   2. Add an entry here
+ *   3. Everything else updates automatically
+ *
+ * Fields:
+ *   id            — unique identifier, used for cross-referencing
+ *   title         — display title
+ *   subtitle      — short descriptor shown beneath the title (optional)
+ *   slug          — URL path relative to now.ufmastery.com
+ *   summary       — one sentence for navigation contexts
+ *   cluster       — thematic territory: identity | stability | love | freedom
+ *   role          — function: threshold | deep-dive | bridge | interactive | hub
+ *   series        — series ID if part of a series, null otherwise
+ *   seriesOrder   — position within a series (0 = premise, 1–7 = essays), null if standalone
+ *   featured      — appears on the gateway homepage
+ *   featuredOrder  — controls homepage placement within its pathway section (lower = higher); only set on featured items
+ *   recommendedNext — one piece ID; the single strongest next step
+ *   relatedPieces — array of piece IDs; the wider neighborhood
+ *   status        — published | draft | archived
+ *   publishDate   — ISO date string
+ *   readTime      — approximate read time in minutes
+ */
+
+const siteConfig = {
+
+  // ─── Site-level metadata ───────────────────────────────────────────
+  site: {
+    name: "Ultimate Freedom Mastery",
+    tagline: "A cinematic library for seeing the deeper structures beneath human experience",
+    baseUrl: "https://now.ufmastery.com",
+    cmsUrl: "https://ufmastery.com",
+    cta: {
+      label: "Begin a diagnostic conversation",
+      url: "https://ufmastery.com/diagnostic"  // update when live
+    },
+    email: {
+      label: "Stay in this work",
+      url: "https://ufmastery.com/subscribe"  // update when live
+    }
+  },
+
+  // ─── Cluster definitions ───────────────────────────────────────────
+  // Used by the homepage to generate pathway sections.
+  // Order here = display order on the gateway homepage.
+  clusters: [
+    {
+      id: "identity",
+      label: "Seeing the game",
+      description: "How identity shapes what seems true, feels real, and becomes possible"
+    },
+    {
+      id: "stability",
+      label: "Holding structure under pressure",
+      description: "What happens when identity activates — and what allows coherence to remain"
+    },
+    {
+      id: "love",
+      label: "Love, conflict, and care",
+      description: "How identity shapes relationship, compassion, and moral clarity"
+    },
+    {
+      id: "freedom",
+      label: "What freedom actually is",
+      description: "Beyond recognition — what it takes for architecture to change"
+    }
+  ],
+
+  // ─── Series definitions ────────────────────────────────────────────
+  series: [
+    {
+      id: "identity-architecture",
+      title: "The Identity Architecture Series",
+      subtitle: "An ongoing investigation",
+      hubId: "ias-hub",
+      readingOrder: [
+        "ias-premise",
+        "ias-the-pattern",
+        "ias-the-hidden-architecture",
+        "ias-what-identity-is-trying-to-produce",
+        "ias-being",
+        "ias-architecture",
+        "ias-instrument",
+        "ias-the-upgrade"
+      ]
+    },
+    {
+      id: "ultimate-freedom",
+      title: "Ultimate Freedom",
+      subtitle: "After Identity Architecture",
+      hubId: "uf-hub",
+      readingOrder: [
+        "uf-the-question-that-follows",
+        "uf-the-redesign-environment",
+        "uf-the-architecture-of-freedom",
+        "uf-the-movement"
+      ]
+    }
+  ],
+
+  // ─── All pieces ────────────────────────────────────────────────────
+  pieces: [
+
+    // ═══════════════════════════════════════════════════════════════════
+    //  STANDALONE PIECES
+    // ═══════════════════════════════════════════════════════════════════
+
+    {
+      id: "the-first-realization",
+      title: "The First Realization",
+      subtitle: "On the moment your experience stops looking like reality and starts looking like architecture",
+      slug: "/the-first-realization/",
+      summary: "The moment you notice that your experience is being produced by something other than what happened.",
+      cluster: "identity",
+      role: "threshold",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 1,
+      recommendedNext: "ias-hub",
+      relatedPieces: ["ias-the-pattern", "ias-the-hidden-architecture", "recalculating"],
+      status: "published",
+      publishDate: "2024-01-01",  // approximate — update with actual date
+      readTime: 6
+    },
+
+    {
+      id: "recalculating",
+      title: "Recalculating",
+      subtitle: "On knowing where you stand",
+      slug: "/recalculating/",
+      summary: "A recognition that the navigation system you've been following may not know where you actually are.",
+      cluster: "identity",
+      role: "threshold",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 2,
+      recommendedNext: "the-first-realization",
+      relatedPieces: ["the-crack-in-the-script", "ias-hub"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 5
+    },
+
+    {
+      id: "the-crack-in-the-script",
+      title: "The Crack in the Script",
+      subtitle: null,  // update when accessible
+      slug: "/the-crack-in-the-script/",
+      summary: "When the story you've been living inside starts to show its edges.",
+      cluster: "identity",
+      role: "threshold",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 3,
+      recommendedNext: "the-first-realization",
+      relatedPieces: ["recalculating", "ias-the-pattern"],
+      status: "published",  // NOTE: returned 404 on fetch — verify URL
+      publishDate: "2024-01-01",
+      readTime: null  // update when accessible
+    },
+
+    {
+      id: "the-layer-beneath-mindset",
+      title: "The Layer Beneath Mindset",
+      subtitle: "Why high-functioning adults still destabilize under pressure — and the structural layer no one is addressing",
+      slug: "/the-layer-beneath-mindset/",
+      summary: "Introduces orientation as the structural layer beneath mindset that existing disciplines don't address.",
+      cluster: "stability",
+      role: "bridge",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 1,
+      recommendedNext: "stability-under-activation",
+      relatedPieces: ["ias-hub", "the-interrupt", "ias-architecture"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 10
+    },
+
+    {
+      id: "stability-under-activation",
+      title: "Stability Under Activation",
+      subtitle: "Identity, Recovery, and the Discipline of Sovereignty",
+      slug: "/stability-under-activation/",
+      summary: "What happens when identity activates under pressure — and the discipline required to hold structure.",
+      cluster: "stability",
+      role: "deep-dive",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 2,
+      recommendedNext: "uf-hub",
+      relatedPieces: ["the-layer-beneath-mindset", "the-interrupt", "ias-the-pattern"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 15
+    },
+
+    {
+      id: "the-interrupt",
+      title: "The Interrupt",
+      subtitle: null,
+      slug: "/the-interrupt/",
+      summary: "An interactive experience designed to produce self-awareness through pause rather than explanation.",
+      cluster: "stability",
+      role: "interactive",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 3,
+      recommendedNext: "the-first-realization",
+      relatedPieces: ["the-layer-beneath-mindset", "stability-under-activation"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 3
+    },
+
+    {
+      id: "the-circle-of-love",
+      title: "The Circle of Love",
+      subtitle: null,  // update when accessible
+      slug: "/the-circle-of-love/",
+      summary: "How identity shapes love, conflict, and the capacity for genuine care.",
+      cluster: "love",
+      role: "deep-dive",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 1,
+      recommendedNext: "uf-hub",
+      relatedPieces: ["ias-what-identity-is-trying-to-produce", "uf-the-architecture-of-freedom"],
+      status: "published",  // NOTE: returned 404 on fetch — verify URL
+      publishDate: "2024-01-01",
+      readTime: null  // update when accessible
+    },
+
+    {
+      id: "the-return-to-life",
+      title: "The Return to Life",
+      subtitle: "What freedom becomes when it matures",
+      slug: "/the-return-to-life/",
+      summary: "Why relief is not yet embodiment — and what it means for freedom to enter the body of a life.",
+      cluster: "freedom",
+      role: "deep-dive",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 2,
+      recommendedNext: "the-circle-of-love",
+      relatedPieces: ["uf-the-movement", "uf-the-architecture-of-freedom", "stability-under-activation"],
+      status: "published",
+      publishDate: "2025-03-12",
+      readTime: 20
+    },
+
+    {
+      id: "ultimate-freedom-flagship",
+      title: "Ultimate Freedom",
+      subtitle: "The hidden structure beneath human striving",
+      slug: "/ultimate-freedom-flagship/",
+      summary: "Every visible pursuit is chasing the same three experiential states — and they were never somewhere else.",
+      cluster: "freedom",
+      role: "deep-dive",
+      series: null,
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 3,
+      recommendedNext: "the-return-to-life",
+      relatedPieces: ["uf-the-architecture-of-freedom", "ias-what-identity-is-trying-to-produce", "the-circle-of-love"],
+      status: "published",
+      publishDate: "2025-03-12",
+      readTime: 18
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    //  IDENTITY ARCHITECTURE SERIES
+    // ═══════════════════════════════════════════════════════════════════
+
+    {
+      id: "ias-hub",
+      title: "Collected Essays on Identity Architecture",
+      subtitle: "An ongoing investigation",
+      slug: "/identity-architecture/",
+      summary: "A philosophical investigation into how perception, experience, and behavior are produced by identity.",
+      cluster: "identity",
+      role: "hub",
+      series: "identity-architecture",
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 4,
+      recommendedNext: "ias-premise",
+      relatedPieces: ["the-first-realization", "uf-hub"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 35  // full series
+    },
+
+    {
+      id: "ias-premise",
+      title: "The Upgrade We Forgot to Make",
+      subtitle: "An essay on the gap between what humanity built and what humanity became",
+      slug: "/identity-architecture/premise/",
+      summary: "The civilizational argument: humanity upgraded its technology faster than its consciousness.",
+      cluster: "identity",
+      role: "bridge",
+      series: "identity-architecture",
+      seriesOrder: 0,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "ias-the-pattern",
+      relatedPieces: ["the-first-realization", "the-layer-beneath-mindset"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 8
+    },
+
+    {
+      id: "ias-the-pattern",
+      title: "The Pattern",
+      subtitle: "On the structure beneath reaction",
+      slug: "/identity-architecture/the-pattern/",
+      summary: "Why intelligent people repeat behaviors they understand — and what that reveals about the structure producing them.",
+      cluster: "identity",
+      role: "deep-dive",
+      series: "identity-architecture",
+      seriesOrder: 1,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "ias-the-hidden-architecture",
+      relatedPieces: ["stability-under-activation", "the-first-realization"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 4
+    },
+
+    {
+      id: "ias-the-hidden-architecture",
+      title: "The Hidden Architecture",
+      subtitle: "On the structure that produces experience",
+      slug: "/identity-architecture/the-hidden-architecture/",
+      summary: "Same situation, completely different experiences — because something else is determining what each person perceives.",
+      cluster: "identity",
+      role: "deep-dive",
+      series: "identity-architecture",
+      seriesOrder: 2,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "ias-what-identity-is-trying-to-produce",
+      relatedPieces: ["the-first-realization", "ias-the-pattern"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 5
+    },
+
+    {
+      id: "ias-what-identity-is-trying-to-produce",
+      title: "What Identity Is Trying to Produce",
+      subtitle: "On the invisible pursuit beneath every visible one",
+      slug: "/identity-architecture/what-identity-is-trying-to-produce/",
+      summary: "Every visible pursuit — achievement, security, approval, control — is chasing the same invisible experiential state.",
+      cluster: "identity",
+      role: "deep-dive",
+      series: "identity-architecture",
+      seriesOrder: 3,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "ias-being",
+      relatedPieces: ["the-circle-of-love", "uf-the-architecture-of-freedom"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 5
+    },
+
+    {
+      id: "ias-being",
+      title: "Being",
+      subtitle: "On the one who notices",
+      slug: "/identity-architecture/being/",
+      summary: "If identity shapes experience, the next question: who is aware of identity?",
+      cluster: "identity",
+      role: "deep-dive",
+      series: "identity-architecture",
+      seriesOrder: 4,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "ias-architecture",
+      relatedPieces: ["uf-the-question-that-follows", "the-interrupt"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 5
+    },
+
+    {
+      id: "ias-architecture",
+      title: "Architecture",
+      subtitle: "On seeing the structure — and choosing how to move within it",
+      slug: "/identity-architecture/architecture/",
+      summary: "Once identity becomes visible as structure rather than self, it becomes something that can be worked with.",
+      cluster: "identity",
+      role: "deep-dive",
+      series: "identity-architecture",
+      seriesOrder: 5,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "ias-instrument",
+      relatedPieces: ["stability-under-activation", "the-layer-beneath-mindset"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 5
+    },
+
+    {
+      id: "ias-instrument",
+      title: "Instrument",
+      subtitle: "On what identity becomes when it is no longer mistaken for the self",
+      slug: "/identity-architecture/instrument/",
+      summary: "Identity was never the self — it was always the instrument. And instruments can be chosen.",
+      cluster: "identity",
+      role: "deep-dive",
+      series: "identity-architecture",
+      seriesOrder: 6,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "ias-the-upgrade",
+      relatedPieces: ["uf-the-redesign-environment", "ias-being"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 5
+    },
+
+    {
+      id: "ias-the-upgrade",
+      title: "The Upgrade",
+      subtitle: "On what was always present",
+      slug: "/identity-architecture/the-upgrade/",
+      summary: "The final essay reveals that the awareness observing the entire sequence was the discovery all along.",
+      cluster: "identity",
+      role: "deep-dive",
+      series: "identity-architecture",
+      seriesOrder: 7,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "uf-hub",
+      relatedPieces: ["ias-being", "uf-the-question-that-follows"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 5
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    //  ULTIMATE FREEDOM SERIES
+    // ═══════════════════════════════════════════════════════════════════
+
+    {
+      id: "uf-hub",
+      title: "Ultimate Freedom",
+      subtitle: "After Identity Architecture",
+      slug: "/ultimate-freedom/",
+      summary: "Why seeing the structure is not yet the same as being free of it — and what freedom actually requires.",
+      cluster: "freedom",
+      role: "hub",
+      series: "ultimate-freedom",
+      seriesOrder: null,
+      featured: true,
+      featuredOrder: 1,
+      recommendedNext: "uf-the-question-that-follows",
+      relatedPieces: ["ias-hub", "ias-the-upgrade"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 25  // full series
+    },
+
+    {
+      id: "uf-the-question-that-follows",
+      title: "The Question That Follows",
+      subtitle: "On why seeing the structure is not yet the same as being free of it",
+      slug: "/ultimate-freedom/the-question-that-follows/",
+      summary: "The pattern is visible — but the old momentum remains. Recognition alone does not produce freedom.",
+      cluster: "freedom",
+      role: "deep-dive",
+      series: "ultimate-freedom",
+      seriesOrder: 1,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "uf-the-redesign-environment",
+      relatedPieces: ["ias-the-upgrade", "stability-under-activation"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 6
+    },
+
+    {
+      id: "uf-the-redesign-environment",
+      title: "The Redesign Environment",
+      subtitle: "On the difference between seeing the structure and being able to work with it",
+      slug: "/ultimate-freedom/the-redesign-environment/",
+      summary: "What is being lived as reality is difficult to redesign as architecture. Fusion must be interrupted first.",
+      cluster: "freedom",
+      role: "deep-dive",
+      series: "ultimate-freedom",
+      seriesOrder: 2,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "uf-the-architecture-of-freedom",
+      relatedPieces: ["ias-instrument", "the-interrupt"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 6
+    },
+
+    {
+      id: "uf-the-architecture-of-freedom",
+      title: "The Architecture of Freedom",
+      subtitle: "On what human striving has been trying to produce — and the structure that makes it reliable",
+      slug: "/ultimate-freedom/the-architecture-of-freedom/",
+      summary: "Beneath the infinite variety of human pursuit, the same three experiential states keep appearing: peace, love, happiness.",
+      cluster: "freedom",
+      role: "deep-dive",
+      series: "ultimate-freedom",
+      seriesOrder: 3,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "uf-the-movement",
+      relatedPieces: ["the-circle-of-love", "ias-what-identity-is-trying-to-produce"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 7
+    },
+
+    {
+      id: "uf-the-movement",
+      title: "The Movement",
+      subtitle: "On how freedom becomes lived",
+      slug: "/ultimate-freedom/the-movement/",
+      summary: "Freedom enters time, action, and relationship — or it remains a beautiful interruption.",
+      cluster: "freedom",
+      role: "deep-dive",
+      series: "ultimate-freedom",
+      seriesOrder: 4,
+      featured: false,
+      featuredOrder: null,
+      recommendedNext: "the-return-to-life",  // the natural continuation after the UF series
+      relatedPieces: ["the-circle-of-love", "stability-under-activation", "the-interrupt"],
+      status: "published",
+      publishDate: "2024-01-01",
+      readTime: 7
+    }
+  ]
+};
+
+
+// ─── Helper functions ──────────────────────────────────────────────
+// These can be used by the homepage template and individual piece templates.
+
+/**
+ * Get all published pieces.
+ */
+function getPublishedPieces() {
+  return siteConfig.pieces.filter(p => p.status === "published");
+}
+
+/**
+ * Get a piece by its ID.
+ */
+function getPiece(id) {
+  return siteConfig.pieces.find(p => p.id === id) || null;
+}
+
+/**
+ * Get all featured pieces for the homepage, sorted by featuredOrder within each cluster.
+ */
+function getFeaturedByCluster(clusterId) {
+  return getPublishedPieces()
+    .filter(p => p.cluster === clusterId && p.featured)
+    .sort((a, b) => (a.featuredOrder || 99) - (b.featuredOrder || 99));
+}
+
+/**
+ * Get the recommended next piece object for a given piece.
+ */
+function getRecommendedNext(pieceId) {
+  const piece = getPiece(pieceId);
+  if (!piece || !piece.recommendedNext) return null;
+  return getPiece(piece.recommendedNext);
+}
+
+/**
+ * Get related piece objects for a given piece.
+ */
+function getRelatedPieces(pieceId) {
+  const piece = getPiece(pieceId);
+  if (!piece) return [];
+  return piece.relatedPieces
+    .map(id => getPiece(id))
+    .filter(p => p && p.status === "published");
+}
+
+/**
+ * Get all pieces in a series, in reading order.
+ */
+function getSeriesPieces(seriesId) {
+  const series = siteConfig.series.find(s => s.id === seriesId);
+  if (!series) return [];
+  return series.readingOrder
+    .map(id => getPiece(id))
+    .filter(p => p && p.status === "published");
+}
+
+/**
+ * Get the full URL for a piece.
+ */
+function getPieceUrl(pieceId) {
+  const piece = getPiece(pieceId);
+  if (!piece) return "#";
+  return siteConfig.site.baseUrl + piece.slug;
+}
+
+/**
+ * Get cluster metadata.
+ */
+function getCluster(clusterId) {
+  return siteConfig.clusters.find(c => c.id === clusterId) || null;
+}
+
+  </script>
+
+  <script>
+    function getPiece(id) {
+      return siteConfig.pieces.find(p => p.id === id) || null;
+    }
+
+    function getFeaturedByCluster(clusterId) {
+      return siteConfig.pieces
+        .filter(p => p.cluster === clusterId && p.featured && p.status === "published")
+        .sort((a, b) => (a.featuredOrder || 99) - (b.featuredOrder || 99));
+    }
+
+    function pieceUrl(piece) {
+      return siteConfig.site.baseUrl + piece.slug;
+    }
+
+    function roleLabel(role) {
+      const labels = {
+        'threshold': 'Threshold',
+        'deep-dive': 'Deep dive',
+        'bridge': 'Bridge',
+        'interactive': 'Interactive',
+        'hub': 'Series'
+      };
+      return labels[role] || role;
+    }
+
+    function cardDetail(piece) {
+      return piece.subtitle || piece.summary;
+    }
+
+    const START_HERE_ID = "the-first-realization";
+
+    function renderStartHere() {
+      const piece = getPiece(START_HERE_ID);
+      if (!piece) return;
+      const slot = document.getElementById('start-here-slot');
+      slot.innerHTML = `
+        <a href="${pieceUrl(piece)}" class="start-here-card">
+          <div class="card-title">${piece.title}</div>
+          <div class="card-summary">${piece.subtitle || piece.summary}</div>
+          <div class="card-meta">${piece.readTime ? '~' + piece.readTime + ' min read' : 'Essay'}</div>
+        </a>
+      `;
+    }
+
+    function renderPathways() {
+      const container = document.getElementById('pathways-container');
+      let html = '';
+
+      const activeClusters = siteConfig.clusters.filter(c => getFeaturedByCluster(c.id).length > 0);
+
+      activeClusters.forEach((cluster, idx) => {
+        const pieces = getFeaturedByCluster(cluster.id);
+
+        html += `
+          <section class="section">
+            <div class="reveal">
+              <div class="section-heading">${cluster.label}</div>
+              <div class="section-description">${cluster.description}</div>
+            </div>
+            <div class="pathway-grid reveal-stagger">
+              ${pieces.map(piece => `
+                <a href="${pieceUrl(piece)}" class="piece-card reveal ${piece.role === 'hub' ? 'series-hub' : ''}">
+                  <div class="card-role">${roleLabel(piece.role)}${piece.readTime ? ' · ~' + piece.readTime + ' min' : ''}</div>
+                  <div class="card-title">${piece.title}</div>
+                  <div class="card-detail">${cardDetail(piece)}</div>
+                </a>
+              `).join('')}
+            </div>
+          </section>
+          ${idx < activeClusters.length - 1 ? '<div class="section-divider reveal"></div>' : ''}
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function initReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderStartHere();
+      renderPathways();
+      document.body.classList.add('js-ready');
+      requestAnimationFrame(() => {
+        initReveal();
+      });
+    });
+  </script>
+</body>
+</html>
